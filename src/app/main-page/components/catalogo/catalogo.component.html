@@ -1,10 +1,14 @@
-
-
-<div class="box">
-  <ng-container *ngFor="let item of resultadosFiltrados">
-    <a [routerLink]="item.url">
-      <img [src]="item.imagen" alt="{{ item.nombre }}" />
-      <p class="text-black">{{ item.nombre }}</p>
-    </a>
-  </ng-container>
+<div class="main-container">
+  <div *ngFor="let categoria of resultadosPorCategoria | keyvalue">
+    <h2 style="margin-bottom: 10px; color: var(--light);">{{ categoria.key }}</h2>
+    <div class="box">
+      <ng-container *ngFor="let item of categoria.value">
+        <a [routerLink]="item.url">
+          <img [src]="item.imagen" alt="{{ item.nombre }}" />
+          <p class="text-black">{{ item.nombre }}</p>
+        </a>
+      </ng-container>
+    </div>
+    <hr style="margin: 40px 0; border-color: var(--dark);" />
+  </div>
 </div>
