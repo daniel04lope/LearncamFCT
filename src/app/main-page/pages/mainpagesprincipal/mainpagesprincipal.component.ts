@@ -13,5 +13,9 @@ import { CatalogoComponent } from '../../components/catalogo/catalogo.component'
   styleUrl: './mainpagesprincipal.component.css'
 })
 export class MainpagesprincipalComponent {
+  terminoBusqueda = '';
 
+  actualizarBusqueda(termino: string) {
+    this.terminoBusqueda = termino;
+  }
 }

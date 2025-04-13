@@ -14,18 +14,18 @@ export class DesplegablesComponent {
       title: 'Tema 1: TÍTULO DEL TEMA',
       isOpen: false, // Accordion item toggle state
       activities: [
-        { name: 'Nombre de la actividad', isOpen: false },
-        { name: 'Nombre de la actividad', isOpen: false },
-        { name: 'Nombre de la actividad', isOpen: false }
+        { name: 'Actividad 1', link: '/camera', isOpen: false },
+        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
+        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
       ]
     },
     {
       title: 'Tema 2: TÍTULO DEL TEMA',
       isOpen: false, // Accordion item toggle state
       activities: [
-        { name: 'Nombre de la actividad', isOpen: false },
-        { name: 'Nombre de la actividad', isOpen: false },
-        { name: 'Nombre de la actividad', isOpen: false }
+        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
+        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
+        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
       ]
     }
   ];

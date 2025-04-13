@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CabeceraComponent } from './components/cabecera/cabecera.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -8,7 +9,8 @@ import { CabeceraComponent } from './components/cabecera/cabecera.component';
   declarations: [],
   imports: [
     CommonModule,
-    CabeceraComponent
+    CabeceraComponent,
+    RouterModule
   ],
   exports: [CabeceraComponent]
 })

@@ -1,0 +1,123 @@
+:host {
+    display: block;
+    position: relative;
+    background-color: #1a1a1a;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .outputCanvas {
+    display: block;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+    height: auto;
+    background: #000;
+    position: relative;
+  }
+  
+  .controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 100;
+  }
+  
+  .control-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: #e74c3c;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  }
+  
+  .control-button:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+  }
+  
+  .control-button:active {
+    transform: translateY(0);
+  }
+  
+  .control-button.paused {
+    background: #2ecc71;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  
+  .control-button.paused:hover {
+    background: #27ae60;
+  }
+  
+  .camera-frame {
+    position: relative;
+    margin: 0 auto;
+    max-width: 1280px;
+  }
+  
+  .camera-frame::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    z-index: -1;
+  }
+  
+  .status-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #2ecc71;
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(0.95); }
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .outputCanvas {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    
+    .control-button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  }

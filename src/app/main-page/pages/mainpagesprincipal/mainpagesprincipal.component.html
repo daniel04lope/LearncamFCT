@@ -1,2 +1,2 @@
-<app-cabecera></app-cabecera>
-<app-catalogo></app-catalogo>
+<app-cabecera (buscar)="actualizarBusqueda($event)"></app-cabecera>
+<app-catalogo [terminoBusqueda]="terminoBusqueda"></app-catalogo>
