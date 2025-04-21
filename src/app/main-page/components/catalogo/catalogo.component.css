@@ -56,7 +56,7 @@ header {
 
 /* MAIN CONTAINER */
 .main-container {
-  padding: 100px 30px 30px 30px;
+  padding: 50px 30px 30px 30px; /* ⬅️ espacio superior reducido */
 }
 
 /* BOX DE CARDS */
@@ -108,7 +108,7 @@ footer {
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .main-container {
-    padding: 90px 20px 20px 20px;
+    padding: 60px 20px 20px 20px; /* ⬅️ también reducido en responsive */
   }
 
   .card img {

@@ -1,45 +1,46 @@
 <!-- cabecera.component.html -->
-<div class="px-3 py-2 bg-dark text-white">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-between">
-  
-        <!-- Logo -->
-        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-          <img src="../../../../assets/Leanrcam.svg" width="70" height="70" alt="Home" />
-        </a>
-  
-        <!-- 🔍 Barra de búsqueda -->
+<div class="bg-dark text-white shadow-sm py-3">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-between">
+
+      <!-- Logo -->
+      <a href="/" class="d-flex align-items-center text-white text-decoration-none">
+        <img src="../../../../assets/Leanrcam.svg" width="90" height="90" alt="Home" class="me-2" />
+        <span class="fs-4 fw-bold">Leanrcam</span>
+      </a>
+
+      <!-- 🔍 Barra de búsqueda -->
+      <div class="flex-grow-1 mx-4" *ngIf="mostrarBarraBusqueda">
         <input
           type="text"
-          class="form-control w-50 me-3"
+          class="form-control form-control-sm rounded-pill px-4"
           placeholder="Buscar en catálogo..."
           [(ngModel)]="terminoBusqueda"
           (input)="onBuscar()"
         />
-  
-        <!-- 🔘 Menú de navegación -->
-        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-          <li>
-            <a href="#" class="nav-link text-secondary">
-              <img src="../../../../assets/home-button.png" width="24" height="24" class="d-block mx-auto mb-1" alt="Home">
-              INICIO
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <img src="../../../../assets/categories.png" width="24" height="24" class="d-block mx-auto mb-1" alt="Categorías">
-              CATEGORÍAS
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <img src="../../../../assets/settings.png" width="24" height="24" class="d-block mx-auto mb-1" alt="Ajustes">
-              AJUSTES
-            </a>
-          </li>
-        </ul>
-  
       </div>
+
+      <!-- 🔘 Menú de navegación -->
+      <ul class="nav text-end">
+        <li class="nav-item mx-2">
+          <a href="#" class="nav-link text-white d-flex flex-column align-items-center">
+            <img src="../../../../assets/home-button.png" width="24" height="24" alt="Home">
+            <small>Inicio</small>
+          </a>
+        </li>
+        <li class="nav-item mx-2">
+          <a href="#" class="nav-link text-white d-flex flex-column align-items-center">
+            <img src="../../../../assets/categories.png" width="24" height="24" alt="Categorías">
+            <small>Categorías</small>
+          </a>
+        </li>
+        <li class="nav-item mx-2">
+          <a href="#" class="nav-link text-white d-flex flex-column align-items-center">
+            <img src="../../../../assets/settings.png" width="24" height="24" alt="Ajustes">
+            <small>Ajustes</small>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
-  
+</div>
