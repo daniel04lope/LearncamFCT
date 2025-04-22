@@ -10,7 +10,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 @Component({
   selector: 'app-cabecera',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ], // ⬅️ Asegúrate de importar RouterModule
+  imports: [CommonModule, FormsModule, RouterModule, ], 
   templateUrl: './cabecera.component.html',
   styleUrls: ['./cabecera.component.css']
 })
