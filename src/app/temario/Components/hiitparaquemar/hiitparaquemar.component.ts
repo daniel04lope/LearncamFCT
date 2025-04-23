@@ -11,31 +11,38 @@ import { Component } from '@angular/core';
 export class HiitparaquemarComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Preparación para el HIIT de Quema de Grasa',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Introducción al HIIT para pérdida de grasa', link: '/camera', isOpen: false },
+        { name: 'Evaluación inicial: estado físico y objetivos', link: '/camera', isOpen: false },
+        { name: 'Rutina de calentamiento y activación', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Circuitos HIIT de Alta Quema Calórica',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Circuito explosivo 30/30 full body', link: '/camera', isOpen: false },
+        { name: 'HIIT en intervalos descendentes (piramidal)', link: '/camera', isOpen: false },
+        { name: 'Sprints y ejercicios metabólicos', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Control del Progreso y Recuperación',
+      isOpen: false,
+      activities: [
+        { name: 'Seguimiento de resultados: medidas, peso, energía', link: '/camera', isOpen: false },
+        { name: 'Errores comunes que frenan la quema de grasa', link: '/camera', isOpen: false },
+        { name: 'Enfriamiento y respiración post-HIIT', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

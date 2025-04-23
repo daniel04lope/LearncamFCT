@@ -11,31 +11,56 @@ import { Component } from '@angular/core';
 export class CrossfitpaprincipiantesComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Fundamentos del CrossFit',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: '¿Qué es el CrossFit?', link: '/camera', isOpen: false },
+        { name: 'Principios del entrenamiento funcional', link: '/camera', isOpen: false },
+        { name: 'Preparación física básica', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Movimientos Básicos',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Sentadillas (Air Squat)', link: '/camera', isOpen: false },
+        { name: 'Flexiones (Push-up) adaptadas', link: '/camera', isOpen: false },
+        { name: 'Peso muerto (Deadlift) con técnica', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Estructura del Entrenamiento',
+      isOpen: false,
+      activities: [
+        { name: 'Calentamiento y movilidad inicial', link: '/camera', isOpen: false },
+        { name: 'WOD para principiantes', link: '/camera', isOpen: false },
+        { name: 'Enfriamiento y estiramientos', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 4: Seguridad y Prevención',
+      isOpen: false,
+      activities: [
+        { name: 'Errores comunes en principiantes', link: '/camera', isOpen: false },
+        { name: 'Prevención de lesiones', link: '/camera', isOpen: false },
+        { name: 'Importancia de la progresión', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 5: Nutrición y Hábitos Saludables',
+      isOpen: false,
+      activities: [
+        { name: 'Alimentación para rendimiento', link: '/camera', isOpen: false },
+        { name: 'Hidratación y descanso', link: '/camera', isOpen: false },
+        { name: 'Rutinas sostenibles para novatos', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

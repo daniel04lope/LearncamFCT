@@ -11,31 +11,38 @@ import { Component } from '@angular/core';
 export class GimnasiasuaveComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Fundamentos de la Gimnasia Suave',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Presentación y beneficios de la gimnasia suave', link: '/camera', isOpen: false },
+        { name: 'Precauciones y adaptación del ejercicio', link: '/camera', isOpen: false },
+        { name: 'Respiración consciente y controlada', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Rutinas de Movimiento Suave',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Movilidad articular desde casa', link: '/camera', isOpen: false },
+        { name: 'Estiramientos suaves para el cuerpo completo', link: '/camera', isOpen: false },
+        { name: 'Ejercicios de pie y en silla para todos los niveles', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Cierre y Relajación',
+      isOpen: false,
+      activities: [
+        { name: 'Secuencia de relajación corporal', link: '/camera', isOpen: false },
+        { name: 'Meditación guiada para después del ejercicio', link: '/camera', isOpen: false },
+        { name: 'Consejos para mantener una práctica constante', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

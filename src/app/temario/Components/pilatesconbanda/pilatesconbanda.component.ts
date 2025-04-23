@@ -11,21 +11,21 @@ import { Component } from '@angular/core';
 export class PilatesconbandaComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Introducción al Pilates con Banda',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Fundamentos del Pilates con Banda', link: '/camera', isOpen: false },
+        { name: 'Ejercicios de respiración y alineación', link: '/actividad-2', isOpen: false },
+        { name: 'Técnicas de activación muscular', link: '/actividad-3', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Rutinas con Banda para Cuerpo Completo',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Ejercicios para la parte superior del cuerpo', link: '/actividad-4', isOpen: false },
+        { name: 'Ejercicios para piernas y glúteos', link: '/actividad-5', isOpen: false },
+        { name: 'Estiramientos y relajación', link: '/actividad-6', isOpen: false }
       ]
     }
   ];

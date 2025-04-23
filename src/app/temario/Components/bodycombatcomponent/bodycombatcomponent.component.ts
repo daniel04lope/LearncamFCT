@@ -11,31 +11,47 @@ import { Component } from '@angular/core';
 export class BodycombatcomponentComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Técnica y Fundamentos',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Postura de guardia y desplazamiento', link: '/camera', isOpen: false },
+        { name: 'Golpes de puño: jab, cross y uppercut', link: '/camera', isOpen: false },
+        { name: 'Patadas básicas: frontal y lateral', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Combos y Cardio de Impacto',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Combinaciones de puño y patada', link: '/camera', isOpen: false },
+        { name: 'Bloques y defensas en movimiento', link: '/camera', isOpen: false },
+        { name: 'Circuito cardiovascular explosivo', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Fuerza Funcional y Core',
+      isOpen: false,
+      activities: [
+        { name: 'Flexiones con técnica de combate', link: '/camera', isOpen: false },
+        { name: 'Trabajo abdominal con impacto', link: '/camera', isOpen: false },
+        { name: 'Burpees y ejercicios pliométricos', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 4: Vuelta a la Calma y Estiramientos',
+      isOpen: false,
+      activities: [
+        { name: 'Respiración y relajación muscular', link: '/camera', isOpen: false },
+        { name: 'Estiramientos específicos de combate', link: '/camera', isOpen: false },
+        { name: 'Mindfulness post-entrenamiento', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

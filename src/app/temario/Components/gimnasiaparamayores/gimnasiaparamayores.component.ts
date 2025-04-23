@@ -11,31 +11,38 @@ import { Component } from '@angular/core';
 export class GimnasiaparamayoresComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Ejercicio Físico Seguro para Mayores',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Introducción a la actividad física en la tercera edad', link: '/camera', isOpen: false },
+        { name: 'Precauciones y adaptaciones en el entrenamiento', link: '/camera', isOpen: false },
+        { name: 'Ejercicios de bajo impacto', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Mejora de la Movilidad y la Fuerza',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Ejercicios de fuerza con el propio peso corporal', link: '/camera', isOpen: false },
+        { name: 'Entrenamiento de equilibrio y coordinación', link: '/camera', isOpen: false },
+        { name: 'Estiramientos y relajación para mayores', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Rutinas Funcionales para la Vida Diaria',
+      isOpen: false,
+      activities: [
+        { name: 'Ejercicios para mejorar la postura', link: '/camera', isOpen: false },
+        { name: 'Movimientos funcionales cotidianos (sentarse, levantarse, alcanzar objetos)', link: '/camera', isOpen: false },
+        { name: 'Rutinas sencillas para hacer en casa', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

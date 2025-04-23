@@ -11,31 +11,38 @@ import { Component } from '@angular/core';
 export class HiitintermedioComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Fundamentos y Técnica',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Qué es el HIIT y cómo hacerlo bien', link: '/camera', isOpen: false },
+        { name: 'Calentamiento dinámico para evitar lesiones', link: '/camera', isOpen: false },
+        { name: 'Técnica de ejercicios clave (burpees, jumping jacks, mountain climbers)', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Entrenamientos HIIT Intermedios',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Circuito 1: 20/10 con ejercicios de fuerza y cardio', link: '/camera', isOpen: false },
+        { name: 'Circuito 2: Tabata para zona media y tren inferior', link: '/camera', isOpen: false },
+        { name: 'Enfriamiento y estiramiento final', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Consejos y Progresión',
+      isOpen: false,
+      activities: [
+        { name: 'Cómo progresar sin agotarte ni lesionarte', link: '/camera', isOpen: false },
+        { name: 'Adaptaciones para distintos niveles de resistencia', link: '/camera', isOpen: false },
+        { name: 'Frecuencia y combinación con otros entrenamientos', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

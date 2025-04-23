@@ -11,31 +11,38 @@ import { Component } from '@angular/core';
 export class EstiramientosymovilidadComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Fundamentos del Estiramiento y la Movilidad',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Importancia del estiramiento', link: '/camera', isOpen: false },
+        { name: 'Tipos de estiramientos (estático, dinámico)', link: '/camera', isOpen: false },
+        { name: 'Errores comunes en el estiramiento', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Movilidad Articular y Control Corporal',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Ejercicios de movilidad de cadera y hombros', link: '/camera', isOpen: false },
+        { name: 'Activaciones previas al entrenamiento', link: '/camera', isOpen: false },
+        { name: 'Trabajo con foam roller y bandas elásticas', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Rutinas Prácticas',
+      isOpen: false,
+      activities: [
+        { name: 'Rutina de estiramientos para después de entrenar', link: '/camera', isOpen: false },
+        { name: 'Movilidad matutina para mejorar el rango articular', link: '/camera', isOpen: false },
+        { name: 'Estiramientos para personas sedentarias', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }

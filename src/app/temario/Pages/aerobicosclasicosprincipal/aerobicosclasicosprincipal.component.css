@@ -1,0 +1,10 @@
+#cuerpo {
+    background-image: url(../../../../assets/temarios.png) !important;
+    background-size: cover !important; /* Hace que el fondo cubra toda el área */
+    background-position: center !important; /* Centra la imagen */
+    background-repeat: no-repeat !important; /* Evita que la imagen se repita si es más pequeña */
+    width: 100vw !important; /* Asegura que el fondo ocupe todo el ancho de la ventana */
+    height: 100vh !important; /* Asegura que el fondo ocupe toda la altura de la ventana */
+    margin: 0 !important; /* Elimina el margen si lo hubiera */
+  }
+RECORDATORIO TIENES QUE COLOCAR ESTO EN LAS DEMAS PARTES PORQUE O SI NO SE VE COMO LA MIERDA   

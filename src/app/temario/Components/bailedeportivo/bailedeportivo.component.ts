@@ -11,31 +11,47 @@ import { Component } from '@angular/core';
 export class BailedeportivoComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 1: Técnica Básica de Baile Deportivo',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Postura y alineación corporal', link: '/camera', isOpen: false },
+        { name: 'Desplazamientos básicos', link: '/camera', isOpen: false },
+        { name: 'Trabajo de pies y brazos', link: '/camera', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
-      isOpen: false, // Accordion item toggle state
+      title: 'Tema 2: Ritmos Latinos',
+      isOpen: false,
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Cha-cha-chá básico', link: '/camera', isOpen: false },
+        { name: 'Samba en pareja', link: '/camera', isOpen: false },
+        { name: 'Rumba y expresión corporal', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 3: Ritmos Standard',
+      isOpen: false,
+      activities: [
+        { name: 'Vals inglés', link: '/camera', isOpen: false },
+        { name: 'Tango internacional', link: '/camera', isOpen: false },
+        { name: 'Quickstep', link: '/camera', isOpen: false }
+      ]
+    },
+    {
+      title: 'Tema 4: Práctica Coreográfica y Musicalidad',
+      isOpen: false,
+      activities: [
+        { name: 'Montaje coreográfico', link: '/camera', isOpen: false },
+        { name: 'Interpretación musical', link: '/camera', isOpen: false },
+        { name: 'Práctica con pareja', link: '/camera', isOpen: false }
       ]
     }
   ];
 
-  // Toggle the accordion item (Tema 1, Tema 2)
   toggle(index: number): void {
     this.itemsState[index].isOpen = !this.itemsState[index].isOpen;
   }
 
-  // Toggle individual activity visibility
   toggleActivity(index: number, activityIndex: number): void {
     this.itemsState[index].activities[activityIndex].isOpen = !this.itemsState[index].activities[activityIndex].isOpen;
   }
