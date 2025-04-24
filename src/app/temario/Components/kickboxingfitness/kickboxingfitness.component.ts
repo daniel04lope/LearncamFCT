@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-kickboxingfitness',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './kickboxingfitness.component.html',
-  styleUrl: './kickboxingfitness.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class KickboxingfitnessComponent {
   itemsState = [

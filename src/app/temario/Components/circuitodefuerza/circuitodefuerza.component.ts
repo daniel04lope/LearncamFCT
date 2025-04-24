@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-circuitodefuerza',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './circuitodefuerza.component.html',
-  styleUrl: './circuitodefuerza.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class CircuitodefuerzaComponent {
   itemsState = [

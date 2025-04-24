@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-estiramientosymovilidad',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './estiramientosymovilidad.component.html',
-  styleUrl: './estiramientosymovilidad.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class EstiramientosymovilidadComponent {
   itemsState = [

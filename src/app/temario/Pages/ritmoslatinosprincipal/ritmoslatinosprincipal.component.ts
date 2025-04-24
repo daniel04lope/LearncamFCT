@@ -7,7 +7,7 @@ import { CabeceraComponent } from '../../../main-page/components/cabecera/cabece
   standalone: true,
   imports: [RitmoslatinosComponent,CabeceraComponent],
   templateUrl: './ritmoslatinosprincipal.component.html',
-  styleUrl: './ritmoslatinosprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class RitmoslatinosprincipalComponent {
 

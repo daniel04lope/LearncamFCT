@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-hiitparaquemar',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './hiitparaquemar.component.html',
-  styleUrl: './hiitparaquemar.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class HiitparaquemarComponent {
   itemsState = [

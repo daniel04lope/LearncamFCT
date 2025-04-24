@@ -8,7 +8,7 @@ import { CrossFitAdaptadoComponent } from '../../Components/cross-fit-adaptado/c
   standalone: true,
   imports: [CabeceraComponent,CrossFitAdaptadoComponent],
   templateUrl: './crossfitadaptadoprincipal.component.html',
-  styleUrl: './crossfitadaptadoprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class CrossfitadaptadoprincipalComponent {
 

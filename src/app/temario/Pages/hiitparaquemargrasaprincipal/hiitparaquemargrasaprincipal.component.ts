@@ -8,7 +8,7 @@ import { HiitparaquemarComponent } from '../../Components/hiitparaquemar/hiitpar
   standalone : true,
   imports: [CabeceraComponent,HiitparaquemarComponent],
   templateUrl: './hiitparaquemargrasaprincipal.component.html',
-  styleUrl: './hiitparaquemargrasaprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class HiitparaquemargrasaprincipalComponent {
 

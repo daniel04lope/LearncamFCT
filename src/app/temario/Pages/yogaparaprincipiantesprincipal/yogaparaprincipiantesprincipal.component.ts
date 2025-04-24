@@ -8,7 +8,7 @@ import { YogaparaprincipiantesComponent } from '../../Components/yogaparaprincip
   standalone:true,
   imports: [CabeceraComponent,YogaparaprincipiantesComponent],
   templateUrl: './yogaparaprincipiantesprincipal.component.html',
-  styleUrl: './yogaparaprincipiantesprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class YogaparaprincipiantesprincipalComponent {
 

@@ -7,7 +7,7 @@ import { CabeceraComponent } from '../../../main-page/components/cabecera/cabece
   standalone: true,
   imports: [MeditacionyrespiracionComponent,CabeceraComponent],
   templateUrl: './meditacionyrespiracionprincipal.component.html',
-  styleUrl: './meditacionyrespiracionprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class MeditacionyrespiracionprincipalComponent {
 

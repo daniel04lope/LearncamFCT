@@ -8,7 +8,7 @@ import { BodycombatcomponentComponent } from '../../Components/bodycombatcompone
   standalone: true,
   imports: [CabeceraComponent,BodycombatcomponentComponent],
   templateUrl: './bodycombatprincipal.component.html',
-  styleUrl: './bodycombatprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class BodycombatprincipalComponent {
 

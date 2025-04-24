@@ -8,7 +8,7 @@ import { EntrenamientofuncionalComponent } from "../../Components/entrenamientof
   standalone: true,
   imports: [CabeceraComponent, EntrenamientofuncionalComponent],
   templateUrl: './entrenamientofuncionalprincipal.component.html',
-  styleUrl: './entrenamientofuncionalprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class EntrenamientofuncionalprincipalComponent {
 

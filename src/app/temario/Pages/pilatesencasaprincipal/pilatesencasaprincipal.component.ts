@@ -8,7 +8,7 @@ import { PilatesencasaComponent } from '../../Components/pilatesencasa/pilatesen
   standalone:true,
   imports: [CabeceraComponent,PilatesencasaComponent],
   templateUrl: './pilatesencasaprincipal.component.html',
-  styleUrl: './pilatesencasaprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class PilatesencasaprincipalComponent {
 

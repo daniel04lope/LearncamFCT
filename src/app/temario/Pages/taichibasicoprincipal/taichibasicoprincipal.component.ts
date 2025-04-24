@@ -8,7 +8,7 @@ import { TaichibasicoComponent } from '../../Components/taichibasico/taichibasic
   standalone: true,
   imports: [CabeceraComponent,TaichibasicoComponent],
   templateUrl: './taichibasicoprincipal.component.html',
-  styleUrl: './taichibasicoprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class TaichibasicoprincipalComponent {
 

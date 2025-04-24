@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-cardioenpareja',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './cardioenpareja.component.html',
-  styleUrl: './cardioenpareja.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class CardioenparejaComponent {
   itemsState = [

@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-yogaparaprincipiantes',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './yogaparaprincipiantes.component.html',
-  styleUrl: './yogaparaprincipiantes.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class YogaparaprincipiantesComponent {
   itemsState = [

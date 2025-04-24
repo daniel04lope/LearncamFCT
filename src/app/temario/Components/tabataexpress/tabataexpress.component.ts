@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-tabataexpress',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './tabataexpress.component.html',
-  styleUrl: './tabataexpress.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class TabataexpressComponent {
   itemsState = [

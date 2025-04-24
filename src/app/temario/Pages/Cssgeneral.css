@@ -1,0 +1,67 @@
+/* Contenedor principal */
+#cuerpo {
+    position: relative;
+    width: 100vw;               /* Ojo: si eliminas scroll horizontal, quita este */
+    min-height: 100vh;          /* Al menos el alto de la pantalla, pero puede crecer */
+    margin: 0;
+  
+    background: url(../../../assets/temarios_4k_expandidaY.png)
+                center/cover no-repeat;
+    overflow-x: auto;           /* Scroll lateral si hace falta */
+    overflow-y: auto;           /* Scroll vertical si hace falta */
+  }
+  
+  /* Pseudo-elemento para el patrón animado */
+  #cuerpo::before {
+    content: "";
+    position: absolute;
+    top: 0;      /* Arranca arriba */
+    bottom: 0;   /* Llega hasta abajo del contenedor */
+    left: 0;
+    right: 0;
+  
+    background-color: #def;
+    background-image:
+      radial-gradient(transparent 0.6em, #def 0.6em),
+      conic-gradient(at 1em 1em, transparent 270deg, #4203 270deg),
+      conic-gradient(at 1em 1em, transparent 270deg, #4204 270deg),
+      conic-gradient(at 1em 1em, transparent 270deg, #4205 270deg),
+      conic-gradient(at 1em 1em, transparent 270deg, #4206 270deg);
+    background-size: 1em 1em, 4em 4em, 4em 4em, 4em 4em, 4em 4em;
+    animation:
+      bpx 12s linear infinite,
+      bpy 12s linear infinite -3.75s;
+  
+    z-index: 0;          /* Entre la imagen estática y el contenido */
+    pointer-events: none;
+  }
+  
+  /* Tus componentes siempre por encima */
+ #componentes {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Keyframes (sin cambios) */
+  @keyframes bpx {
+    0%,   7.5%,100% { background-position-x:  0,   0,   1em, 2em, 3em; }
+    12.5%,20%      { background-position-x:  0,   1em, 0,   3em, 2em; }
+    25%,  32.5%    { background-position-x:  0,  -1em, -2em, 5em, 4em; }
+    37.5%,45%      { background-position-x:  0,   1em, -4em, 7em, 2em; }
+    50%,  57.5%    { background-position-x:  0,  -2em, -5em, 8em, 5em; }
+    62.5%,70%      { background-position-x:  0,  -3em, -4em, 7em, 6em; }
+    75%,  82.5%    { background-position-x:  0,  -1em, -2em, 5em, 4em; }
+    87.5%,95%      { background-position-x:  0,  -3em, 0,    3em, 6em; }
+  }
+  
+  @keyframes bpy {
+    0%,   7.5%,100% { background-position-y:  0,   0,   1em, 2em, 3em; }
+    12.5%,20%      { background-position-y:  0,   1em, 0,   3em, 2em; }
+    25%,  32.5%    { background-position-y:  0,  -1em, -2em, 5em, 4em; }
+    37.5%,45%      { background-position-y:  0,   1em, -4em, 7em, 2em; }
+    50%,  57.5%    { background-position-y:  0,  -2em, -5em, 8em, 5em; }
+    62.5%,70%      { background-position-y:  0,  -3em, -4em, 7em, 6em; }
+    75%,  82.5%    { background-position-y:  0,  -1em, -2em, 5em, 4em; }
+    87.5%,95%      { background-position-y:  0,  -3em, 0,    3em, 6em; }
+  }
+  

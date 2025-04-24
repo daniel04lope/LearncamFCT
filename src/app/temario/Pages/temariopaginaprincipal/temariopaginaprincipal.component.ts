@@ -7,7 +7,7 @@ import { CabeceraComponent } from '../../../main-page/components/cabecera/cabece
   standalone: true,
   imports: [DesplegablesComponent,CabeceraComponent],
   templateUrl: './temariopaginaprincipal.component.html',
-  styleUrl: './temariopaginaprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class TemariopaginaprincipalComponent {
 

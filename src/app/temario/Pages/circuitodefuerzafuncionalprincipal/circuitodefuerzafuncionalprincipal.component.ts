@@ -8,7 +8,7 @@ import { CircuitodefuerzaComponent } from "../../Components/circuitodefuerza/cir
   standalone:true,
   imports: [CabeceraComponent,CircuitodefuerzaComponent],
   templateUrl: './circuitodefuerzafuncionalprincipal.component.html',
-  styleUrl: './circuitodefuerzafuncionalprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class CircuitodefuerzafuncionalprincipalComponent {
 

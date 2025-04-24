@@ -8,7 +8,7 @@ import { GimnasiaparamayoresComponent } from "../../Components/gimnasiaparamayor
   standalone: true,
   imports: [CabeceraComponent,GimnasiaparamayoresComponent],
   templateUrl: './gimnasiaparamayoresprincipal.component.html',
-  styleUrl: './gimnasiaparamayoresprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class GimnasiaparamayoresprincipalComponent {
 

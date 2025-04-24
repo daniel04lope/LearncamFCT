@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-mindfulnessdiario',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './mindfulnessdiario.component.html',
-  styleUrl: './mindfulnessdiario.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class MindfulnessdiarioComponent {
   itemsState = [

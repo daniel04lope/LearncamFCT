@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-taichiavanzado',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './taichiavanzado.component.html',
-  styleUrl: './taichiavanzado.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class TaichiavanzadoComponent {
   itemsState = [

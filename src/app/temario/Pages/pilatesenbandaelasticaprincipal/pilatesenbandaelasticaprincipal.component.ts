@@ -8,7 +8,7 @@ import { PilatesconbandaComponent } from "../../Components/pilatesconbanda/pilat
   standalone:true,
   imports: [CabeceraComponent,PilatesconbandaComponent],
   templateUrl: './pilatesenbandaelasticaprincipal.component.html',
-  styleUrl: './pilatesenbandaelasticaprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class PilatesenbandaelasticaprincipalComponent {
 

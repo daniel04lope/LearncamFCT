@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-ritmoslatinos',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './ritmoslatinos.component.html',
-  styleUrl: './ritmoslatinos.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class RitmoslatinosComponent {
   itemsState = [

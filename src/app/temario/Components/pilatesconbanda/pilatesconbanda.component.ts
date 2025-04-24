@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-pilatesconbanda',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './pilatesconbanda.component.html',
-  styleUrl: './pilatesconbanda.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class PilatesconbandaComponent {
   itemsState = [

@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-gimnasiaparamayores',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './gimnasiaparamayores.component.html',
-  styleUrl: './gimnasiaparamayores.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class GimnasiaparamayoresComponent {
   itemsState = [

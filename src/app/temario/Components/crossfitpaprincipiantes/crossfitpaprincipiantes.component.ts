@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-crossfitpaprincipiantes',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './crossfitpaprincipiantes.component.html',
-  styleUrl: './crossfitpaprincipiantes.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class CrossfitpaprincipiantesComponent {
   itemsState = [

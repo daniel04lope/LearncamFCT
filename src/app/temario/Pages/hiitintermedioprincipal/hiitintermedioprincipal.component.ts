@@ -8,7 +8,7 @@ import { HiitintermedioComponent } from "../../Components/hiitintermedio/hiitint
   standalone : true,
   imports: [CabeceraComponent,HiitintermedioComponent],
   templateUrl: './hiitintermedioprincipal.component.html',
-  styleUrl: './hiitintermedioprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class HiitintermedioprincipalComponent {
 

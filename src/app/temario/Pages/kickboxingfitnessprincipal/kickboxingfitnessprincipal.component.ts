@@ -8,7 +8,7 @@ import { KickboxingfitnessComponent } from '../../Components/kickboxingfitness/k
   standalone: true,
   imports: [CabeceraComponent,KickboxingfitnessComponent],
   templateUrl: './kickboxingfitnessprincipal.component.html',
-  styleUrl: './kickboxingfitnessprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class KickboxingfitnessprincipalComponent {
 

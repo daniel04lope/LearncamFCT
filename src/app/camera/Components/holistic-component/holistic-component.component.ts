@@ -1,5 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+// src/app/holistic-component/holistic-component.component.ts
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import Splitting from 'splitting';
 import { Holistic, Results } from '@mediapipe/holistic';
+import { CommonModule } from '@angular/common';
 
 const FACEMESH_CONNECTIONS: [number, number][] = [
   [33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154], [154, 155], [155, 133],
@@ -14,14 +17,19 @@ const POSE_CONNECTIONS: [number, number][] = [
 @Component({
   selector: 'app-holistic',
   templateUrl: './holistic-component.component.html',
-  styleUrls: ['./holistic-component.component.css'],
+  imports: [CommonModule],
+  styleUrls: ['./holistic-component.component.scss'],
   standalone: true
 })
-export class HolisticComponent implements OnInit {
+export class HolisticComponent implements OnInit, AfterViewInit {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   @ViewChild('outputCanvas') outputCanvas!: ElementRef<HTMLCanvasElement>;
 
+  isDetecting: boolean = true;
+  isCameraLoading: boolean = true;
   private holistic!: Holistic;
+  private mediaStream: MediaStream | null = null;
+  private animationFrameId: number | null = null;
 
   private leftEyeIndices = [33, 160, 158, 133, 153, 144];
   private rightEyeIndices = [263, 387, 385, 362, 380, 373];
@@ -33,9 +41,13 @@ export class HolisticComponent implements OnInit {
     this.setupHolistic();
   }
 
+  ngAfterViewInit(): void {
+    Splitting();
+  }
+
   setupHolistic(): void {
     this.holistic = new Holistic({
-      locateFile: (file: string) => `/assets/mediapipe/holistic/${file}`
+      locateFile: file => `/assets/mediapipe/holistic/${file}`
     });
 
     this.holistic.setOptions({
@@ -45,17 +57,59 @@ export class HolisticComponent implements OnInit {
       refineFaceLandmarks: true,
     });
 
-    this.holistic.onResults((results: Results) => {
-      this.processFrame(results);
-    });
-
+    this.holistic.onResults((results: Results) => this.processFrame(results));
     this.startCamera();
   }
 
- 
+  async startCamera() {
+    try {
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      this.video.nativeElement.srcObject = this.mediaStream;
+      await this.video.nativeElement.play();
+      this.isCameraLoading = false;
+
+      const loop = async () => {
+        if (this.video.nativeElement.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+          await this.holistic.send({ image: this.video.nativeElement });
+        }
+        this.animationFrameId = requestAnimationFrame(loop);
+      };
+      loop();
+    } catch (err) {
+      console.error('Error al iniciar la cámara:', err);
+      this.isCameraLoading = false;
+    }
+  }
+
+  toggleDetection() {
+    this.isDetecting = !this.isDetecting;
+    if (this.isDetecting) {
+      this.startCamera();
+    } else {
+      this.stopProcessing();
+    }
+  }
+
+  private stopProcessing() {
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
+      this.mediaStream = null;
+    }
+    const ctx = this.outputCanvas.nativeElement.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.fillStyle = 'white';
+      ctx.font = '20px Arial';
+      ctx.fillText('Detección pausada', 10, 30);
+    }
+  }
 
   computeDistance(p1: any, p2: any): number {
-    return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    return Math.hypot(p1.x - p2.x, p1.y - p2.y);
   }
 
   computeEar(landmarks: any[], indices: number[]): number {
@@ -73,146 +127,69 @@ export class HolisticComponent implements OnInit {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 🔄 Refleja la imagen horizontalmente
+    // Reflejo horizontal
     ctx.save();
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
     ctx.restore();
 
-    // 🔄 Reflejar X de los landmarks (copia)
     const mirrorLandmarks = (landmarks: any[]) =>
-      landmarks.map(p => ({
-        ...p,
-        x: 1 - p.x // reflejo horizontal
-      }));
+      landmarks.map(p => ({ ...p, x: 1 - p.x }));
 
     const HAND_CONNECTIONS: [number, number][] = [
-      [0, 1], [1, 2], [2, 3], [3, 4],
-      [0, 5], [5, 6], [6, 7], [7, 8],
-      [5, 9], [9, 10], [10, 11], [11, 12],
-      [9, 13], [13, 14], [14, 15], [15, 16],
-      [13, 17], [17, 18], [18, 19], [19, 20],
-      [0, 17]
+      [0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],
+      [5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],
+      [13,17],[17,18],[18,19],[19,20],[0,17]
     ];
 
     if (results.faceLandmarks) {
       this.drawFaceLandmarks(ctx, mirrorLandmarks(results.faceLandmarks as any[]));
     }
-
     if (results.poseLandmarks) {
       this.drawConnections(ctx, mirrorLandmarks(results.poseLandmarks as any[]), POSE_CONNECTIONS, 'red');
     }
-
     if (results.leftHandLandmarks) {
       this.drawConnections(ctx, mirrorLandmarks(results.leftHandLandmarks as any[]), HAND_CONNECTIONS, 'green');
     }
-
     if (results.rightHandLandmarks) {
       this.drawConnections(ctx, mirrorLandmarks(results.rightHandLandmarks as any[]), HAND_CONNECTIONS, 'yellow');
     }
   }
 
   drawFaceLandmarks(ctx: CanvasRenderingContext2D, landmarks: any[]): void {
-    if (!landmarks.length) return;
-
     if (landmarks[33] && landmarks[263]) {
       const leftEar = this.computeEar(landmarks, this.leftEyeIndices);
       const rightEar = this.computeEar(landmarks, this.rightEyeIndices);
       const avgEar = (leftEar + rightEar) / 2.0;
-
       if (avgEar < this.blinkThreshold) {
         ctx.fillStyle = 'red';
         ctx.font = '20px Arial';
         ctx.fillText('Parpadeo detectado', 10, 30);
       }
     }
-
-    for (const point of landmarks) {
-      const x = point.x * ctx.canvas.width;
-      const y = point.y * ctx.canvas.height;
+    for (const p of landmarks) {
+      const x = p.x * ctx.canvas.width;
+      const y = p.y * ctx.canvas.height;
       ctx.beginPath();
       ctx.arc(x, y, 2, 0, 2 * Math.PI);
       ctx.fillStyle = 'blue';
       ctx.fill();
     }
-
     this.drawConnections(ctx, landmarks, FACEMESH_CONNECTIONS, 'blue');
   }
 
   drawConnections(ctx: CanvasRenderingContext2D, landmarks: any[], connections: [number, number][], color: string): void {
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
-
-    for (const [start, end] of connections) {
-      const p1 = landmarks[start];
-      const p2 = landmarks[end];
+    for (const [i1, i2] of connections) {
+      const p1 = landmarks[i1], p2 = landmarks[i2];
       if (p1 && p2) {
-        const x1 = p1.x * ctx.canvas.width;
-        const y1 = p1.y * ctx.canvas.height;
-        const x2 = p2.x * ctx.canvas.width;
-        const y2 = p2.y * ctx.canvas.height;
         ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
+        ctx.moveTo(p1.x * ctx.canvas.width, p1.y * ctx.canvas.height);
+        ctx.lineTo(p2.x * ctx.canvas.width, p2.y * ctx.canvas.height);
         ctx.stroke();
       }
-    }
-  }
-
-  isDetecting: boolean = true;
-  private mediaStream: MediaStream | null = null;
-  private animationFrameId: number | null = null;
-
-  toggleDetection() {
-    this.isDetecting = !this.isDetecting;
-    if (this.isDetecting) {
-      this.startCamera();
-    } else {
-      this.stopProcessing();
-    }
-  }
-
-  private stopProcessing() {
-    // Detener el procesamiento de frames
-    if (this.animationFrameId) {
-      cancelAnimationFrame(this.animationFrameId);
-      this.animationFrameId = null;
-    }
-    
-    // Detener la transmisión de video
-    if (this.mediaStream) {
-      this.mediaStream.getTracks().forEach(track => track.stop());
-      this.mediaStream = null;
-    }
-    
-    // Limpiar el canvas
-    const ctx = this.outputCanvas.nativeElement.getContext('2d');
-    if (ctx) {
-      ctx.clearRect(0, 0, this.outputCanvas.nativeElement.width, this.outputCanvas.nativeElement.height);
-      ctx.fillStyle = 'white';
-      ctx.font = '20px Arial';
-      ctx.fillText('Detección pausada', 10, 30);
-    }
-  }
-
-  async startCamera() {
-    try {
-      // Obtener nueva transmisión de video
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      this.video.nativeElement.srcObject = this.mediaStream;
-      await this.video.nativeElement.play();
-
-      // Reiniciar el procesamiento de frames
-      const processFrame = async () => {
-        if (this.video.nativeElement.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
-          await this.holistic.send({ image: this.video.nativeElement });
-        }
-        this.animationFrameId = requestAnimationFrame(processFrame);
-      };
-      processFrame();
-    } catch (error) {
-      console.error('Error al reiniciar la cámara:', error);
     }
   }
 }

@@ -9,7 +9,7 @@ import { TabataexpressComponent } from '../../Components/tabataexpress/tabataexp
   standalone: true,
   imports: [CabeceraComponent,TabataexpressComponent],
   templateUrl: './tabataexpressprincipal.component.html',
-  styleUrl: './tabataexpressprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class TabataexpressprincipalComponent {
 

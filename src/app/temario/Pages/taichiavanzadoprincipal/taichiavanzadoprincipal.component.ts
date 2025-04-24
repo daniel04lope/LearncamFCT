@@ -7,7 +7,7 @@ import { CabeceraComponent } from '../../../main-page/components/cabecera/cabece
   standalone: true,
   imports: [TaichiavanzadoComponent,CabeceraComponent],
   templateUrl: './taichiavanzadoprincipal.component.html',
-  styleUrl: './taichiavanzadoprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class TaichiavanzadoprincipalComponent {
 

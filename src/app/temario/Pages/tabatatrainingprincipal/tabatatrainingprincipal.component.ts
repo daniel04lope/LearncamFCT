@@ -8,7 +8,7 @@ import { TabatatrainingComponent } from '../../Components/tabatatraining/tabatat
   standalone : true,
   imports: [CabeceraComponent,TabatatrainingComponent],
   templateUrl: './tabatatrainingprincipal.component.html',
-  styleUrl: './tabatatrainingprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class TabatatrainingprincipalComponent {
 

@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-aerobicosclasicos',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './aerobicosclasicos.component.html',
-  styleUrl: './aerobicosclasicos.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class AerobicosclasicosComponent {
   itemsState = [

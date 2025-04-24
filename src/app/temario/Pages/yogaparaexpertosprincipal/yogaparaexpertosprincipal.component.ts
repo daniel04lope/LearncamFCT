@@ -8,7 +8,7 @@ import { YogaavanzadoComponent } from "../../Components/yogaavanzado/yogaavanzad
   standalone:true,
   imports: [CabeceraComponent,YogaavanzadoComponent],
   templateUrl: './yogaparaexpertosprincipal.component.html',
-  styleUrl: './yogaparaexpertosprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class YogaparaexpertosprincipalComponent {
 

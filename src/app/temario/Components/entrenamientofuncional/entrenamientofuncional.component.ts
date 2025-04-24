@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-entrenamientofuncional',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './entrenamientofuncional.component.html',
-  styleUrl: './entrenamientofuncional.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class EntrenamientofuncionalComponent {
   itemsState = [

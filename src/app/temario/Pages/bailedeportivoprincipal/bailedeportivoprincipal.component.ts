@@ -7,7 +7,7 @@ import { BailedeportivoComponent } from '../../Components/bailedeportivo/bailede
   standalone: true,
   imports: [CabeceraComponent,BailedeportivoComponent],
   templateUrl: './bailedeportivoprincipal.component.html',
-  styleUrl: './bailedeportivoprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class BailedeportivoprincipalComponent {
 

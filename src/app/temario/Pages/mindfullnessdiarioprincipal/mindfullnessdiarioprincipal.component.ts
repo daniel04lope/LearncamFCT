@@ -8,7 +8,7 @@ import { MindfulnessdiarioComponent } from '../../Components/mindfulnessdiario/m
   standalone: true,
   imports: [CabeceraComponent,MindfulnessdiarioComponent],
   templateUrl: './mindfullnessdiarioprincipal.component.html',
-  styleUrl: './mindfullnessdiarioprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class MindfullnessdiarioprincipalComponent {
 

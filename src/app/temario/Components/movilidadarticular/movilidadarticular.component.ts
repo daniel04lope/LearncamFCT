@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-movilidadarticular',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './movilidadarticular.component.html',
-  styleUrl: './movilidadarticular.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class MovilidadarticularComponent {
   itemsState = [

@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-hiitintermedio',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './hiitintermedio.component.html',
-  styleUrl: './hiitintermedio.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class HiitintermedioComponent {
   itemsState = [

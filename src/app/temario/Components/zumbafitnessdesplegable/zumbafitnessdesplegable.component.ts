@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-zumbafitnessdesplegable',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './zumbafitnessdesplegable.component.html',
-  styleUrl: './zumbafitnessdesplegable.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class ZumbafitnessdesplegableComponent {
   itemsState = [

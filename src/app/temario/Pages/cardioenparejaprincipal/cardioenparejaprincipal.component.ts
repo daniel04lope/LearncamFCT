@@ -8,7 +8,7 @@ import { CardioenparejaComponent } from '../../Components/cardioenpareja/cardioe
   standalone: true ,
   imports: [CabeceraComponent,CardioenparejaComponent],
   templateUrl: './cardioenparejaprincipal.component.html',
-  styleUrl: './cardioenparejaprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class CardioenparejaprincipalComponent {
 

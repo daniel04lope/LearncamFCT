@@ -8,7 +8,7 @@ import { CardiobasicoComponent } from "../../Components/cardiobasico/cardiobasic
   standalone:true,
   imports: [CabeceraComponent,CardiobasicoComponent],
   templateUrl: './cardiobasicoprincipal.component.html',
-  styleUrl: './cardiobasicoprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class CardiobasicoprincipalComponent {
 

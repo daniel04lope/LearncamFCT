@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-meditacionyrespiracion',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './meditacionyrespiracion.component.html',
-  styleUrl: './meditacionyrespiracion.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class MeditacionyrespiracionComponent {
   itemsState = [

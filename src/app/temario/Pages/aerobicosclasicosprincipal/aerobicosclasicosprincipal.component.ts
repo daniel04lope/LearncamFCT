@@ -8,7 +8,7 @@ import { AerobicosclasicosComponent } from '../../Components/aerobicosclasicos/a
   standalone: true,
   imports: [CabeceraComponent,AerobicosclasicosComponent],
   templateUrl: './aerobicosclasicosprincipal.component.html',
-  styleUrl: './aerobicosclasicosprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class AerobicosclasicosprincipalComponent {
 

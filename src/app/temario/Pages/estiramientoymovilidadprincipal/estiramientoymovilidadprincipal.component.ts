@@ -8,7 +8,7 @@ import { EstiramientosymovilidadComponent } from "../../Components/estiramientos
   standalone:true,
   imports: [CabeceraComponent,EstiramientosymovilidadComponent],
   templateUrl: './estiramientoymovilidadprincipal.component.html',
-  styleUrl: './estiramientoymovilidadprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class EstiramientoymovilidadprincipalComponent {
 

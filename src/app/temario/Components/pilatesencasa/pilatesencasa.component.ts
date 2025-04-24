@@ -5,27 +5,27 @@ import { Component } from '@angular/core';
   selector: 'app-pilatesencasa',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './pilatesencasa.component.html',
-  styleUrl: './pilatesencasa.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class PilatesencasaComponent {
   itemsState = [
     {
-      title: 'Tema 1: TÍTULO DEL TEMA',
+      title: 'Tema 1: Introducción al Pilates en Casa',
       isOpen: false, // Accordion item toggle state
       activities: [
-        { name: 'Actividad 1', link: '/camera', isOpen: false },
-        { name: 'Actividad 2', link: '/actividad-2', isOpen: false },
-        { name: 'Actividad 3', link: '/actividad-3', isOpen: false }
+        { name: 'Beneficios del Pilates', link: '/camera', isOpen: false },
+        { name: 'Posiciones básicas para empezar', link: '/actividad-2', isOpen: false },
+        { name: 'Consejos para la práctica en casa', link: '/actividad-3', isOpen: false }
       ]
     },
     {
-      title: 'Tema 2: TÍTULO DEL TEMA',
+      title: 'Tema 2: Rutinas de Pilates en Casa',
       isOpen: false, // Accordion item toggle state
       activities: [
-        { name: 'Actividad 4', link: '/actividad-4', isOpen: false },
-        { name: 'Actividad 5', link: '/actividad-5', isOpen: false },
-        { name: 'Actividad 6', link: '/actividad-6', isOpen: false }
+        { name: 'Rutina de ejercicios para el core', link: '/actividad-4', isOpen: false },
+        { name: 'Rutina para mejorar la flexibilidad', link: '/actividad-5', isOpen: false },
+        { name: 'Estiramientos y relajación post-entrenamiento', link: '/actividad-6', isOpen: false }
       ]
     }
   ];

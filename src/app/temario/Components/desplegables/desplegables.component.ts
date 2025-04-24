@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-desplegables',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './desplegables.component.html',
-  styleUrl: './desplegables.component.css'
+  templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class DesplegablesComponent {
   itemsState = [

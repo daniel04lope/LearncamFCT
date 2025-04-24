@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-taichibasico',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './taichibasico.component.html',
-  styleUrl: './taichibasico.component.css'
+   templateUrl: '../Componentecatalogogeneral.html',
+  styleUrl: '../estilocssgeneral.css'
 })
 export class TaichibasicoComponent {
   itemsState = [

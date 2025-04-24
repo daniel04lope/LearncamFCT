@@ -7,7 +7,7 @@ import { ZumbafitnessdesplegableComponent } from '../../Components/zumbafitnessd
   standalone: true,
   imports: [CabeceraComponent, ZumbafitnessdesplegableComponent],
   templateUrl: './zumbafitnessprincipal.component.html',
-  styleUrl: './zumbafitnessprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class ZumbafitnessprincipalComponent {
 
