@@ -1,0 +1,30 @@
+/* 🎥 Video de fondo */
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  
+  /* 📄 Asegurar que el contenido quede encima */
+  .z-1 {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* ✅ Estilos de validación (Angular Reactive Forms) */
+  input.ng-invalid.ng-touched {
+    border-color: #dc3545;
+  }
+  
+  input.ng-valid.ng-touched {
+    border-color: #28a745;
+  }
+  
+  .invalid-feedback {
+    font-size: 0.875rem;
+  }
+  

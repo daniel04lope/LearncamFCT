@@ -98,18 +98,30 @@
   }
   
   .btn {
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 16px;
-    border-radius: 30px;
+    border-radius: 12px;
     border: none;
-    background-color: #007bff;
-    color: #fff;
+    background: linear-gradient(135deg, #acaeb4, #ffffff);
+    color: #000000;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(78, 115, 223, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   
   .btn:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #333, #333);
+    box-shadow: 0 6px 18px rgba(78, 115, 223, 0.5);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(78, 115, 223, 0.3);
   }
   
   /* Transición suave al abrir/cerrar acordeón */

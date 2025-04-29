@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   selector: 'app-pilatesencasa',
   standalone: true,
   imports: [CommonModule],
-   templateUrl: '../Componentecatalogogeneral.html',
+  templateUrl: '../Componentecatalogogeneral.html',
   styleUrl: '../estilocssgeneral.css'
 })
 export class PilatesencasaComponent {

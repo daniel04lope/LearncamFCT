@@ -8,7 +8,7 @@ import { MovilidadarticularComponent } from "../../Components/movilidadarticular
   standalone:true,
   imports: [CabeceraComponent,MovilidadarticularComponent],
   templateUrl: './movilidadarticularprincipal.component.html',
-  styleUrl: './movilidadarticularprincipal.component.css'
+  styleUrl: '../Cssgeneral.css'
 })
 export class MovilidadarticularprincipalComponent {
 

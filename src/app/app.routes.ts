@@ -31,6 +31,9 @@ import { YogaparaexpertosprincipalComponent } from './temario/Pages/yogaparaexpe
 import { YogaparaprincipiantesprincipalComponent } from './temario/Pages/yogaparaprincipiantesprincipal/yogaparaprincipiantesprincipal.component';
 import { ZumbafitnessprincipalComponent } from './temario/Pages/zumbafitnessprincipal/zumbafitnessprincipal.component';
 import { BodycombatprincipalComponent } from './temario/Pages/bodycombatprincipal/bodycombatprincipal.component';
+import { LoginprincipalComponent } from './login/Pages/loginprincipal/loginprincipal.component';
+import { RegisterComponent } from './registro/Components/registro/registro.component';
+import { RegistropaginaprincipalComponent } from './registro/pages/registropaginaprincipal/registropaginaprincipal.component';
 export const routes: Routes = [
   { path: '', component: MainpagesprincipalComponent },
   { path: 'temario', component: TemariopaginaprincipalComponent },
@@ -64,6 +67,9 @@ export const routes: Routes = [
   { path: 'temario/yoga-paraexpertos', component: YogaparaexpertosprincipalComponent },
   { path: 'temario/yoga-paraprincipiantes', component: YogaparaprincipiantesprincipalComponent },
   { path: 'temario/zumbafitness', component: ZumbafitnessprincipalComponent },
-
+  { path: 'login', component: LoginprincipalComponent }, 
+  {path: 'registro', component:RegistropaginaprincipalComponent },
   { path: '**', redirectTo: '' }
+  
+
 ];

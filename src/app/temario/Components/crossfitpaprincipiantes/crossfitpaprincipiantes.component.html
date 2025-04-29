@@ -1,1 +1,34 @@
-<p>crossfitpaprincipiantes works!</p>
+<div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item" *ngFor="let item of itemsState; let i = index">
+      <h2 class="accordion-header" [attr.id]="'panelsStayOpen-heading' + i">
+        <button class="accordion-button" 
+                [class.collapsed]="!item.isOpen"
+                (click)="toggle(i)"
+                type="button"
+                [attr.aria-expanded]="item.isOpen"
+                [attr.aria-controls]="'panelsStayOpen-collapse' + i">
+          {{ item.title }}
+        </button>
+      </h2>
+      <div [id]="'panelsStayOpen-collapse' + i"
+           [ngClass]="{
+             'accordion-collapse collapse show': item.isOpen,
+             'accordion-collapse collapse': !item.isOpen
+           }"
+           [attr.aria-labelledby]="'panelsStayOpen-heading' + i">
+        <div class="accordion-body">
+          <ul>
+            <li *ngFor="let activity of item.activities; let j = index">
+              <!-- Enlace dentro del botón -->
+              <a [href]="activity.link" target="_blank">
+                <button class="btn btn-primary">
+                  INICIAR ACTIVIDAD
+                </button>
+              </a>
+              <span>{{ activity.name }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>

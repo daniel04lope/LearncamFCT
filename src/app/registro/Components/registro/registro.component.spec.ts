@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HolisticComponent } from './holistic-component.component';
+import { RegistroComponent } from './registro.component';
 
-describe('HolisticComponentComponent', () => {
-  let component: HolisticComponent;
-  let fixture: ComponentFixture<HolisticComponent>;
+describe('RegistroComponent', () => {
+  let component: RegistroComponent;
+  let fixture: ComponentFixture<RegistroComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HolisticComponent]
+      imports: [RegistroComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HolisticComponent);
+    fixture = TestBed.createComponent(RegistroComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
