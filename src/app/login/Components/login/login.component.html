@@ -1,17 +1,17 @@
-<!-- Sección completa con video de fondo y formulario -->
 <section class="vh-100 position-relative overflow-hidden">
-
-  <!--  Video de fondo -->
   <video autoplay muted loop class="bg-video">
     <source src="../../../../assets/videofondologin.mp4" type="video/mp4" />
     Tu navegador no soporta videos HTML5.
   </video>
 
-  <!--  Contenido del formulario -->
   <div class="container py-5 h-100 position-relative z-1">
     <div class="row d-flex align-items-center justify-content-center h-100">
       <div class="col-md-6 col-lg-5">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-4 rounded-4 shadow-lg bg-white" novalidate>
+
+          <div *ngIf="errorMessage" class="alert alert-danger mb-4">
+            {{ errorMessage }}
+          </div>
 
           <div class="mb-4">
             <label for="email" class="form-label fw-semibold">Correo electrónico</label>
@@ -30,6 +30,7 @@
               formControlName="password"
               (input)="onPasswordInput()"
               [ngClass]="{'is-invalid': password?.touched && password?.invalid}" />
+            <div class="form-text">Fortaleza: {{ passwordStrength }}</div>
             <div *ngIf="password?.touched && password?.invalid" class="invalid-feedback">
               <div *ngIf="password?.errors?.['required']">La contraseña es obligatoria.</div>
               <div *ngIf="password?.errors?.['minlength']">Debe tener al menos 8 caracteres.</div>
@@ -37,7 +38,6 @@
                 Debe incluir mayúscula, minúscula, número y símbolo.
               </div>
             </div>
-  
           </div>
 
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -48,10 +48,8 @@
             <a href="registro" class="text-primary">¿No tienes cuenta? REGISTRATE</a>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Inicia sesión</button>
-
-          <button type="button" class="btn btn-outline-primary btn-lg w-100 mb-3">
-            <i class="fas fa-face-smile me-2"></i> Inicia sesión con reconocimiento facial
+          <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" [disabled]="loading">
+            {{ loading ? 'Cargando...' : 'Inicia sesión' }}
           </button>
 
           <div class="divider d-flex align-items-center my-4">
@@ -60,13 +58,19 @@
             <hr class="flex-grow-1 ms-2" />
           </div>
 
-          <a class="btn btn-lg w-100 mb-2" style="background-color: #3b5998; color: #fff;" href="#">
-            <i class="fab fa-facebook-f me-2"></i> Continuar con Facebook
-          </a>
+          <button type="button" class="btn btn-lg w-100 mb-2" 
+                  style="background-color: #DB4437; color: #fff;"
+                  (click)="signInWithGoogle()"
+                  [disabled]="loading">
+            <i class="fab fa-google me-2"></i> Continuar con Google
+          </button>
 
-          <a class="btn btn-lg w-100" style="background-color: #55acee; color: #fff;" href="#">
+          <button type="button" class="btn btn-lg w-100" 
+                  style="background-color: #1DA1F2; color: #fff;"
+                  (click)="signInWithTwitter()"
+                  [disabled]="loading">
             <i class="fab fa-twitter me-2"></i> Continuar con Twitter
-          </a>
+          </button>
 
         </form>
       </div>

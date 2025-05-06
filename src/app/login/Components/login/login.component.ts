@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, TwitterAuthProvider, UserCredential } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +12,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  private auth: Auth = inject(Auth);
+  private router = inject(Router);
   loginForm: FormGroup;
   passwordStrength: 'Débil' | 'Media' | 'Fuerte' | '-' = '-';
+  errorMessage: string | null = null;
+  loading = false;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -22,6 +28,69 @@ export class LoginComponent {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)
       ]]
     });
+  }
+
+  async onSubmit(): Promise<void> {
+    this.errorMessage = null;
+    if (this.loginForm.valid) {
+      this.loading = true;
+      const { email, password } = this.loginForm.value;
+      
+      try {
+        await signInWithEmailAndPassword(this.auth, email, password);
+        this.router.navigate(['/dashboard']); // Redirige a la página principal
+      } catch (error) {
+        this.handleError(error);
+      } finally {
+        this.loading = false;
+      }
+    } else {
+      this.loginForm.markAllAsTouched();
+    }
+  }
+
+  async signInWithGoogle(): Promise<void> {
+    this.errorMessage = null;
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(this.auth, provider);
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async signInWithTwitter(): Promise<void> {
+    this.errorMessage = null;
+    try {
+      const provider = new TwitterAuthProvider();
+      await signInWithPopup(this.auth, provider);
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  private handleError(error: any): void {
+    console.error(error);
+    switch (error.code) {
+      case 'auth/invalid-email':
+        this.errorMessage = 'Correo electrónico inválido';
+        break;
+      case 'auth/user-disabled':
+        this.errorMessage = 'Usuario deshabilitado';
+        break;
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        this.errorMessage = 'Correo o contraseña incorrectos';
+        break;
+      case 'auth/popup-closed-by-user':
+        this.errorMessage = 'El popup de autenticación fue cerrado';
+        break;
+      default:
+        this.errorMessage = 'Error al iniciar sesión. Intenta nuevamente.';
+        break;
+    }
   }
 
   onPasswordInput(): void {
@@ -42,15 +111,6 @@ export class LoginComponent {
     if (strength <= 2) return 'Débil';
     if (strength === 3 || strength === 4) return 'Media';
     return 'Fuerte';
-  }
-
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      console.log('Formulario válido:', this.loginForm.value);
-      // Lógica de envío...
-    } else {
-      this.loginForm.markAllAsTouched();
-    }
   }
 
   get email() {
