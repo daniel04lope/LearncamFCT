@@ -8,7 +8,7 @@ import {
   ValidationErrors, 
   Validators 
 } from '@angular/forms';
-import { createUserWithEmailAndPassword, updateProfile, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, getAuth, GoogleAuthProvider, signInWithPopup, TwitterAuthProvider } from 'firebase/auth';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
@@ -20,12 +20,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./registro.component.css']
 })
 export class RegisterComponent implements OnInit {
-  // Inyección de dependencias
   private auth = inject(Auth); 
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
-  // Estado del componente
   registerForm!: FormGroup;
   strengthText = '';
   strengthPercent = '0%';
@@ -88,7 +86,6 @@ export class RegisterComponent implements OnInit {
     this.strengthClass = '';
   }
 
-  // Validadores
   private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value || '';
     const errors: ValidationErrors = {};
@@ -133,6 +130,19 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  async loginWithGoogle(): Promise<void> {
+    this.firebaseErrorMessage = '';
+    const provider = new GoogleAuthProvider();
+
+    try {
+      await signInWithPopup(this.auth, provider);
+      this.router.navigate(['/dashboard']);
+    } catch (error: any) {
+      console.error('Error al iniciar sesión con Google:', error);
+      this.firebaseErrorMessage = this.getFriendlyErrorMessage(error.code);
+    }
+  }
+
   private handleRegistrationSuccess(): void {
     this.registerForm.reset();
     this.router.navigate(['/dashboard']);
@@ -149,9 +159,26 @@ export class RegisterComponent implements OnInit {
       'auth/invalid-email': 'Formato de correo electrónico inválido',
       'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
       'auth/operation-not-allowed': 'Operación no permitida',
-      'auth/too-many-requests': 'Demasiados intentos. Por favor, inténtalo de nuevo más tarde'
+      'auth/too-many-requests': 'Demasiados intentos. Por favor, inténtalo de nuevo más tarde',
+      'auth/popup-closed-by-user': 'Ventana cerrada antes de completar la autenticación',
+      'auth/cancelled-popup-request': 'Ya hay una ventana emergente abierta',
     };
     
     return errorMap[errorCode] || 'Error desconocido. Por favor, inténtalo de nuevo';
   }
+
+
+  async loginWithTwitter(): Promise<void> {
+    this.firebaseErrorMessage = '';
+    const provider = new TwitterAuthProvider();
+  
+    try {
+      await signInWithPopup(this.auth, provider);
+      this.router.navigate(['/dashboard']);
+    } catch (error: any) {
+      console.error('Error al iniciar sesión con Twitter:', error);
+      this.firebaseErrorMessage = this.getFriendlyErrorMessage(error.code);
+    }
+  }
+  
 }
