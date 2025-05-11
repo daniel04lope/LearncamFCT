@@ -3,14 +3,24 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { environment } from '../environments/environment';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAnimations } from '@angular/platform-browser/animations';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDZ3js_JvdHSdcpgQ27rvTjL9DfUHvs3c0",
+  authDomain: "learncamfct.firebaseapp.com",
+  projectId: "learncamfct",
+  storageBucket: "learncamfct.appspot.com",
+  messagingSenderId: "742667960354",
+  appId: "1:742667960354:web:06e2a14e2e2e8d0e9cca7b"
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAnimations(),
-    provideRouter(routes),
-    importProvidersFrom(provideFirebaseApp(() => initializeApp(environment.firebase))),
-    importProvidersFrom(provideAuth(() => getAuth()))
+    provideRouter(routes), // Añadir esto es CRÍTICO
+    provideAnimations(),   // Necesario para componentes de Angular
+    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore())
   ]
 };

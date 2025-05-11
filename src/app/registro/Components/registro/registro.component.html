@@ -74,6 +74,34 @@
                     </div>
                   </div>
 
+                  <!-- Registro facial -->
+                  <div class="d-grid mb-3">
+                    <button type="button" class="btn btn-outline-primary btn-lg rounded-pill" 
+                            (click)="registerFace()" [disabled]="submittingFace">
+                      <span *ngIf="!submittingFace && !faceRegistered">
+                        <i class="bi bi-camera me-2"></i>Registrar Rostro (Opcional)
+                      </span>
+                      <span *ngIf="submittingFace">
+                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                        Detectando rostro...
+                      </span>
+                      <span *ngIf="faceRegistered && !submittingFace">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>Rostro registrado
+                      </span>
+                    </button>
+                  </div>
+
+                  <!-- Vista previa de la cámara -->
+                  <div class="text-center mt-4" *ngIf="showVideoPreview">
+                    <video #videoPreview class="rounded-3 shadow" width="300" autoplay></video>
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="stopCamera()">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                      </button>
+                    </div>
+                    <small class="text-muted d-block mt-2">Asegúrate de tener buena iluminación y mirar directamente a la cámara</small>
+                  </div>
+
                   <!-- Términos -->
                   <div class="form-check mb-4 text-center">
                     <input formControlName="terms" class="form-check-input" type="checkbox" id="terms" 
@@ -102,8 +130,6 @@
 
                   <!-- Botones sociales -->
                   <div class="d-flex gap-3 flex-column">
-                  <!-- Botones sociales -->
-                  <div class="d-flex gap-3 flex-column">
                     <button type="button" class="btn bsb-btn-xl btn-danger" (click)="loginWithGoogle()">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                           class="bi bi-google" viewBox="0 0 16 16">
@@ -111,18 +137,13 @@
                       </svg>
                       <span class="ms-2 fs-6 text-uppercase">Google</span>
                     </button>
-                  </div>
 
-                    
-<!-- Botón de Twitter -->
-<button type="button" class="btn bsb-btn-xl btn-info" (click)="loginWithTwitter()">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
-    <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334v-.425A6.673 6.673 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.084.793A3.286 3.286 0 0 0 7.875 6.03 9.325 9.325 0 0 1 1.112 2.1a3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115c-.212 0-.418-.02-.619-.058a3.288 3.288 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
-  </svg>
-  <span class="ms-2 fs-6 text-uppercase">Twitter</span>
-</button>
-
-
+                    <button type="button" class="btn bsb-btn-xl btn-info" (click)="loginWithTwitter()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+                        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334v-.425A6.673 6.673 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.084.793A3.286 3.286 0 0 0 7.875 6.03 9.325 9.325 0 0 1 1.112 2.1a3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115c-.212 0-.418-.02-.619-.058a3.288 3.288 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+                      </svg>
+                      <span class="ms-2 fs-6 text-uppercase">Twitter</span>
+                    </button>
                   </div>
                 </form>
               </div>

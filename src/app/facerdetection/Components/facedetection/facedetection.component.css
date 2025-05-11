@@ -1,0 +1,25 @@
+.scanner-container {
+    max-width: 500px;
+    margin: auto;
+  }
+  
+  .video-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .face-guide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 360px;
+    border: 4px dashed rgba(0, 255, 0, 0.5);
+    border-radius: 50%;
+    box-sizing: border-box;
+    pointer-events: none;
+    margin: auto;
+    z-index: 2;
+    clip-path: circle(45% at 50% 50%);
+  }
+  

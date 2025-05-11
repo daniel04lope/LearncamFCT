@@ -7,7 +7,7 @@ import { MainpagesprincipalComponent } from './main-page/pages/mainpagesprincipa
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MainpagesprincipalComponent,],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
