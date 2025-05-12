@@ -162,6 +162,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         uid: userCredential.user.uid,
         displayName: name,
         email: email,
+        password: password,         // ← añade esto
         faceDescriptor: this.faceDescriptor,
         registrationDate: new Date(),
         lastLogin: new Date()

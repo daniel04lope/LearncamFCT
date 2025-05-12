@@ -1,8 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, TwitterAuthProvider, UserCredential } from '@angular/fire/auth';
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  TwitterAuthProvider
+} from '@angular/fire/auth';
+import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import * as faceapi from 'face-api.js';
 
 @Component({
   selector: 'app-login',
@@ -11,113 +19,193 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  private auth: Auth = inject(Auth);
+export class LoginComponent implements OnDestroy {
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
   private router = inject(Router);
-  loginForm: FormGroup;
-  passwordStrength: 'Débil' | 'Media' | 'Fuerte' | '-' = '-';
-  errorMessage: string | null = null;
+  private cd = inject(ChangeDetectorRef);
+
+  loginForm!: FormGroup;
+  firebaseErrorMessage = '';
   loading = false;
+
+  @ViewChild('videoPreview') videoEl!: ElementRef<HTMLVideoElement>;
+
+  showVideoPreview = false;
+  faceMatcher: faceapi.FaceMatcher | null = null;
+  usersData: Array<{ email: string; password: string; descriptor: Float32Array }> = [];
+  private detectionInterval!: number;
+  private modelsLoaded = false;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)
-      ]]
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
-  async onSubmit(): Promise<void> {
-    this.errorMessage = null;
-    if (this.loginForm.valid) {
-      this.loading = true;
-      const { email, password } = this.loginForm.value;
-      
-      try {
-        await signInWithEmailAndPassword(this.auth, email, password);
-        this.router.navigate(['/dashboard']); // Redirige a la página principal
-      } catch (error) {
-        this.handleError(error);
-      } finally {
-        this.loading = false;
-      }
-    } else {
+  ngOnDestroy() {
+    this.cancelFaceLogin();
+  }
+
+  // --- LOGIN TRADICIONAL ---
+  async onSubmit() {
+    this.firebaseErrorMessage = '';
+    if (!this.loginForm.valid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
-  }
-
-  async signInWithGoogle(): Promise<void> {
-    this.errorMessage = null;
+    this.loading = true;
+    const { email, password } = this.loginForm.value;
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(this.auth, provider);
+      await signInWithEmailAndPassword(this.auth, email, password);
       this.router.navigate(['/dashboard']);
-    } catch (error) {
-      this.handleError(error);
+    } catch (err: any) {
+      this.firebaseErrorMessage = this.mapError(err);
+    } finally {
+      this.loading = false;
     }
   }
 
-  async signInWithTwitter(): Promise<void> {
-    this.errorMessage = null;
+  async loginWithGoogle() {
+    this.firebaseErrorMessage = '';
+    this.loading = true;
     try {
-      const provider = new TwitterAuthProvider();
-      await signInWithPopup(this.auth, provider);
+      await signInWithPopup(this.auth, new GoogleAuthProvider());
       this.router.navigate(['/dashboard']);
-    } catch (error) {
-      this.handleError(error);
+    } catch (err: any) {
+      this.firebaseErrorMessage = this.mapError(err);
+    } finally {
+      this.loading = false;
     }
   }
 
-  private handleError(error: any): void {
-    console.error(error);
-    switch (error.code) {
+  async loginWithTwitter() {
+    this.firebaseErrorMessage = '';
+    this.loading = true;
+    try {
+      await signInWithPopup(this.auth, new TwitterAuthProvider());
+      this.router.navigate(['/dashboard']);
+    } catch (err: any) {
+      this.firebaseErrorMessage = this.mapError(err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private mapError(err: any): string {
+    const code = err.code || err.message || '';
+    switch (code) {
       case 'auth/invalid-email':
-        this.errorMessage = 'Correo electrónico inválido';
-        break;
+        return 'Correo inválido';
       case 'auth/user-disabled':
-        this.errorMessage = 'Usuario deshabilitado';
-        break;
+        return 'Usuario deshabilitado';
       case 'auth/user-not-found':
       case 'auth/wrong-password':
-        this.errorMessage = 'Correo o contraseña incorrectos';
-        break;
+        return 'Credenciales incorrectas';
       case 'auth/popup-closed-by-user':
-        this.errorMessage = 'El popup de autenticación fue cerrado';
-        break;
+        return 'Ventana cerrada antes de completar';
       default:
-        this.errorMessage = 'Error al iniciar sesión. Intenta nuevamente.';
-        break;
+        return typeof code === 'string' ? code : 'Error desconocido';
     }
   }
 
-  onPasswordInput(): void {
-    const password = this.loginForm.get('password')?.value || '';
-    this.passwordStrength = this.calculatePasswordStrength(password);
+  // --- LOGIN FACIAL ---
+  async signInWithFacial() {
+    this.firebaseErrorMessage = '';
+    this.loading = true;
+
+    try {
+      await this.loadModels();
+      await this.loadUsersDescriptors();
+
+      if (!this.faceMatcher) {
+        throw new Error('No hay usuarios con rostros registrados');
+      }
+
+      this.showVideoPreview = true;
+      await this.startCamera();
+      this.startDetectionLoop();
+    } catch (err: any) {
+      this.firebaseErrorMessage = err.message;
+      this.loading = false;
+    }
   }
 
-  calculatePasswordStrength(password: string): 'Débil' | 'Media' | 'Fuerte' | '-' {
-    if (!password) return '-';
-
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/\d/.test(password)) strength++;
-    if (/[\W_]/.test(password)) strength++;
-
-    if (strength <= 2) return 'Débil';
-    if (strength === 3 || strength === 4) return 'Media';
-    return 'Fuerte';
+  private async loadModels() {
+    if (this.modelsLoaded) return;
+    const base = '/assets/facedetection';
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(`${base}/tiny_face_detector`),
+      faceapi.nets.faceLandmark68Net.loadFromUri(`${base}/face_landmark_68`),
+      faceapi.nets.faceRecognitionNet.loadFromUri(`${base}/face_recognition`)
+    ]);
+    this.modelsLoaded = true;
   }
 
-  get email() {
-    return this.loginForm.get('email');
+  private async loadUsersDescriptors() {
+    const snap = await getDocs(collection(this.firestore, 'users'));
+    const labeled: faceapi.LabeledFaceDescriptors[] = [];
+    this.usersData = [];
+
+    for (const doc of snap.docs) {
+      const d = doc.data() as any;
+      if (Array.isArray(d.faceDescriptor) && d.faceDescriptor.length === 128 && d.password) {
+        const desc = new Float32Array(d.faceDescriptor as number[]);
+        labeled.push(new faceapi.LabeledFaceDescriptors(d.email, [desc]));
+        this.usersData.push({ email: d.email, password: d.password, descriptor: desc });
+      }
+    }
+
+    if (labeled.length) {
+      this.faceMatcher = new faceapi.FaceMatcher(labeled, 0.6);
+    } else {
+      this.faceMatcher = null;
+    }
   }
 
-  get password() {
-    return this.loginForm.get('password');
+  private async startCamera() {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 } });
+    this.videoEl.nativeElement.srcObject = stream;
+    await this.videoEl.nativeElement.play();
+  }
+
+  private startDetectionLoop() {
+    this.detectionInterval = window.setInterval(async () => {
+      const det = await faceapi
+        .detectSingleFace(this.videoEl.nativeElement, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (det && this.faceMatcher) {
+        const best = this.faceMatcher.findBestMatch(det.descriptor);
+        if (best.label !== 'unknown') {
+          // best.label es el email
+          const user = this.usersData.find(u => u.email === best.label)!;
+          await this.finishFaceLogin(user.email, user.password);
+        }
+      }
+    }, 1500);
+  }
+
+  private async finishFaceLogin(email: string, password: string) {
+    this.cancelFaceLogin();
+    try {
+      await signInWithEmailAndPassword(this.auth, email, password);
+      this.router.navigate(['/dashboard']);
+    } catch (err: any) {
+      this.firebaseErrorMessage = this.mapError(err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  cancelFaceLogin() {
+    clearInterval(this.detectionInterval);
+    if (this.videoEl?.nativeElement?.srcObject) {
+      (this.videoEl.nativeElement.srcObject as MediaStream).getTracks().forEach(t => t.stop());
+    }
+    this.showVideoPreview = false;
+    this.loading = false;
   }
 }

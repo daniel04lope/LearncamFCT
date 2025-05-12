@@ -7,72 +7,109 @@
   <div class="container py-5 h-100 position-relative z-1">
     <div class="row d-flex align-items-center justify-content-center h-100">
       <div class="col-md-6 col-lg-5">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-4 rounded-4 shadow-lg bg-white" novalidate>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+              class="p-4 rounded-4 shadow-lg bg-white" novalidate>
 
-          <div *ngIf="errorMessage" class="alert alert-danger mb-4">
-            {{ errorMessage }}
+          <!-- Alertas de Firebase -->
+          <div *ngIf="firebaseErrorMessage" class="alert alert-danger mb-4">
+            {{ firebaseErrorMessage }}
           </div>
 
+          <!-- Email -->
           <div class="mb-4">
             <label for="email" class="form-label fw-semibold">Correo electrónico</label>
             <input type="email" id="email" class="form-control form-control-lg"
-              formControlName="email"
-              [ngClass]="{'is-invalid': email?.touched && email?.invalid}" />
-            <div *ngIf="email?.touched && email?.invalid" class="invalid-feedback">
-              <div *ngIf="email?.errors?.['required']">El correo es obligatorio.</div>
-              <div *ngIf="email?.errors?.['email']">Formato de correo inválido.</div>
+                   formControlName="email"
+                   [ngClass]="{'is-invalid': loginForm.get('email')?.touched && loginForm.get('email')?.invalid}" />
+            <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')" 
+                 class="invalid-feedback">
+              El correo es obligatorio.
+            </div>
+            <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')" 
+                 class="invalid-feedback">
+              Formato de correo inválido.
             </div>
           </div>
 
+          <!-- Contraseña -->
           <div class="mb-4">
             <label for="password" class="form-label fw-semibold">Contraseña</label>
             <input type="password" id="password" class="form-control form-control-lg"
-              formControlName="password"
-              (input)="onPasswordInput()"
-              [ngClass]="{'is-invalid': password?.touched && password?.invalid}" />
-            <div class="form-text">Fortaleza: {{ passwordStrength }}</div>
-            <div *ngIf="password?.touched && password?.invalid" class="invalid-feedback">
-              <div *ngIf="password?.errors?.['required']">La contraseña es obligatoria.</div>
-              <div *ngIf="password?.errors?.['minlength']">Debe tener al menos 8 caracteres.</div>
-              <div *ngIf="password?.errors?.['pattern']">
-                Debe incluir mayúscula, minúscula, número y símbolo.
-              </div>
+                   formControlName="password"
+                   [ngClass]="{'is-invalid': loginForm.get('password')?.touched && loginForm.get('password')?.invalid}" />
+            <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')" 
+                 class="invalid-feedback">
+              La contraseña es obligatoria.
+            </div>
+            <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('minlength')" 
+                 class="invalid-feedback">
+              Debe tener al menos 8 caracteres.
             </div>
           </div>
 
+          <!-- Enlaces -->
           <div class="d-flex justify-content-between align-items-center mb-4">
             <a href="#" class="text-primary">¿Has olvidado tu contraseña?</a>
-          </div>
-          
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="registro" class="text-primary">¿No tienes cuenta? REGISTRATE</a>
+            <a href="registro" class="text-primary">No tienes cuenta? REGISTRATE</a>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" [disabled]="loading">
+          <!-- Botón de login tradicional -->
+          <button type="submit" class="btn btn-primary btn-lg w-100 mb-3"
+                  [disabled]="loading">
             {{ loading ? 'Cargando...' : 'Inicia sesión' }}
           </button>
 
+          <!-- Separador -->
           <div class="divider d-flex align-items-center my-4">
             <hr class="flex-grow-1 me-2" />
             <span class="text-muted">O</span>
             <hr class="flex-grow-1 ms-2" />
           </div>
 
-          <button type="button" class="btn btn-lg w-100 mb-2" 
+          <!-- Botones de login social -->
+          <button type="button" class="btn btn-lg w-100 mb-2"
                   style="background-color: #DB4437; color: #fff;"
-                  (click)="signInWithGoogle()"
+                  (click)="loginWithGoogle()"
                   [disabled]="loading">
             <i class="fab fa-google me-2"></i> Continuar con Google
           </button>
 
-          <button type="button" class="btn btn-lg w-100" 
+          <button type="button" class="btn btn-lg w-100 mb-2"
                   style="background-color: #1DA1F2; color: #fff;"
-                  (click)="signInWithTwitter()"
+                  (click)="loginWithTwitter()"
                   [disabled]="loading">
             <i class="fab fa-twitter me-2"></i> Continuar con Twitter
           </button>
 
+          <!-- Separador Reconocimiento Facial -->
+          <div class="divider d-flex align-items-center my-4">
+            <hr class="flex-grow-1 me-2" />
+            <span class="text-muted">O continúa con</span>
+            <hr class="flex-grow-1 ms-2" />
+          </div>
+
+          <!-- Botón Reconocimiento Facial -->
+          <button type="button" class="btn btn-lg w-100 mb-2 btn-outline-primary"
+                  (click)="signInWithFacial()"
+                  [disabled]="loading">
+            <i class="bi bi-camera me-2"></i>Continuar con Reconocimiento Facial
+          </button>
         </form>
+
+        <!-- Vista previa de la cámara -->
+        <div class="text-center mt-4" *ngIf="showVideoPreview">
+          <video #videoPreview class="rounded-3 shadow" width="300" autoplay muted></video>
+          <div class="mt-3">
+            <button type="button" class="btn btn-sm btn-danger"
+                    (click)="cancelFaceLogin()">
+              <i class="bi bi-x-circle me-1"></i>Cancelar
+            </button>
+          </div>
+          <small class="text-muted d-block mt-2">
+            Asegúrate de tener buena iluminación y mirar directamente a la cámara
+          </small>
+        </div>
+
       </div>
     </div>
   </div>

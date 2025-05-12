@@ -5,6 +5,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { getFunctions, provideFunctions } from '@angular/fire/functions'; // <-- Añade esto
 
 const firebaseConfig = {
   apiKey: "AIzaSyDZ3js_JvdHSdcpgQ27rvTjL9DfUHvs3c0",
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),   // Necesario para componentes de Angular
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    provideFunctions(() => getFunctions()),
   ]
 };
