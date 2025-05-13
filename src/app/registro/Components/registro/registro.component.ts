@@ -157,16 +157,25 @@ export class RegisterComponent implements OnInit, OnDestroy {
       await updateProfile(userCredential.user, { displayName: name });
 
       // Guardar datos en Firestore
-      const userDocRef = doc(this.firestore, 'users', userCredential.user.uid);
-      await setDoc(userDocRef, {
-        uid: userCredential.user.uid,
-        displayName: name,
-        email: email,
-        password: password,         // ← añade esto
-        faceDescriptor: this.faceDescriptor,
-        registrationDate: new Date(),
-        lastLogin: new Date()
-      });
+ const userDocRef = doc(this.firestore, 'users', userCredential.user.uid);
+await setDoc(userDocRef, {
+  uid: userCredential.user.uid,
+  displayName: name,
+  email: email,
+  password: password,
+  faceDescriptor: this.faceDescriptor,
+  registrationDate: new Date(),
+  lastLogin: new Date(),
+
+  // Historial de acciones
+  historial: [
+    {
+      accion: 'Registro de usuario',
+      fecha: new Date().toISOString(),
+      detalle: 'Usuario registrado por primera vez.'
+    }
+  ]
+});
 
       this.handleRegistrationSuccess();
     } catch (error: any) {

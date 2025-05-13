@@ -34,6 +34,7 @@ import { BodycombatprincipalComponent } from './temario/Pages/bodycombatprincipa
 import { LoginprincipalComponent } from './login/Pages/loginprincipal/loginprincipal.component';
 import { RegisterComponent } from './registro/Components/registro/registro.component';
 import { RegistropaginaprincipalComponent } from './registro/pages/registropaginaprincipal/registropaginaprincipal.component';
+import { HistorialprincipalComponent } from './history/pages/historialprincipal/historialprincipal.component';
 export const routes: Routes = [
   { path: '', component: MainpagesprincipalComponent },
   { path: 'temario', component: TemariopaginaprincipalComponent },
@@ -69,6 +70,7 @@ export const routes: Routes = [
   { path: 'temario/zumbafitness', component: ZumbafitnessprincipalComponent },
   { path: 'login', component: LoginprincipalComponent }, 
   {path: 'registro', component:RegistropaginaprincipalComponent },
+  {path: 'historial', component:HistorialprincipalComponent},
   { path: '**', redirectTo: '' }
   
 

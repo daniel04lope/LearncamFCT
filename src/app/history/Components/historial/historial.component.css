@@ -1,0 +1,177 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  padding: 2rem 1rem;
+}
+
+/* Loader y mensaje vacío */
+.loader,
+.vacio {
+  text-align: center;
+  font-size: 1.3em;
+  margin-top: 3rem;
+  color: #555;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Contenedor principal */
+.contenedor-historial {
+  max-width: 720px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  animation: slideUp 0.5s ease;
+}
+
+/* Título */
+h2 {
+  text-align: center;
+  color: #1a237e;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* Lista de historial */
+.historial-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.historial-lista li {
+  position: relative;
+  background: #e3f2fd;
+  border-left: 6px solid #1976d2;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  padding: 1rem 1.5rem 1rem 2.5rem;
+  transition: all 0.25s ease;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.historial-lista li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(33, 150, 243, 0.12);
+}
+
+/* Ícono decorativo */
+.historial-lista li::before {
+  content: "🕘";
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  font-size: 1.3rem;
+}
+
+/* Título de acción */
+.historial-lista li strong {
+  font-size: 1.15rem;
+  color: #0d47a1;
+}
+
+/* Detalles y fecha */
+.historial-lista li div {
+  margin-top: 6px;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.historial-lista li small {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Estilos especiales por tipo de acción */
+.historial-lista li[data-accion="Registro de usuario"] {
+  border-left-color: #43a047;
+  background-color: #e8f5e9;
+}
+
+.historial-lista li[data-accion="Acceso a contenido"] {
+  border-left-color: #1e88e5;
+  background-color: #e3f2fd;
+}
+
+.historial-lista li[data-accion="Otro"] {
+  border-left-color: #fb8c00;
+  background-color: #fff3e0;
+}
+
+/* Vacio estilizado */
+.vacio {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #fff;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 3rem auto;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.vacio-icono {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: #90a4ae;
+}
+
+.vacio h3 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.vacio p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contenedor-historial {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .historial-lista li {
+    padding-left: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .historial-lista li::before {
+    left: 0.5rem;
+    font-size: 1.1rem;
+  }
+}

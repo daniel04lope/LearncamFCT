@@ -1,0 +1,21 @@
+<!-- Loader -->
+<div *ngIf="cargando" class="loader">Cargando historial...</div>
+
+<!-- Mensaje si no hay historial -->
+<div *ngIf="!cargando && historial.length === 0" class="vacio">
+  <div class="vacio-icono">📭</div>
+  <h3>¡Sin actividad registrada aún!</h3>
+  <p>Tu historial aparecerá aquí cuando empieces a interactuar con el contenido.</p>
+</div>
+
+<!-- Historial listado -->
+<div *ngIf="!cargando && historial.length > 0" class="contenedor-historial">
+  <h2>Historial de Actividad</h2>
+  <ul class="historial-lista">
+    <li *ngFor="let item of historial" [attr.data-accion]="item.accion || 'Otro'">
+      <strong>{{ item.accion }}</strong>
+      <div *ngIf="item.nombre">Contenido: <span>{{ item.nombre }}</span></div>
+      <small>{{ item.fecha | date: 'medium' }}</small>
+    </li>
+  </ul>
+</div>

@@ -2,6 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { Firestore, doc, updateDoc, arrayUnion } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
+import { getAuth } from 'firebase/auth';
+
 @Component({
   selector: 'app-catalogo',
   standalone: true,
@@ -10,6 +14,24 @@ import { RouterModule } from '@angular/router';
   styleUrl: './catalogo.component.css'
 })
 export class CatalogoComponent implements OnChanges {
+  firestore = inject(Firestore);
+async registrarHistorial(nombreItem: string, url: string) {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    const userDocRef = doc(this.firestore, 'users', user.uid);
+    await updateDoc(userDocRef, {
+      historial: arrayUnion({
+        accion: 'Acceso a contenido',
+        nombre: nombreItem,
+        url: url,
+        fecha: new Date().toISOString()
+      })
+    });
+  }
+}
+
   @Input() terminoBusqueda: string = '';
   contenidoOriginal = [
     { nombre: 'Yoga para Principiantes', categoria: 'Yoga', imagen: '../../../../assets/yogaparaprincipantes.png', url: '/temario/yoga-paraprincipiantes' },
