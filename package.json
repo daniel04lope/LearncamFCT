@@ -23,6 +23,7 @@
     "@angular/router": "^17.3.0",
     "@material/form-field": "^14.0.0",
     "@mediapipe/holistic": "^0.5.1675471629",
+    "bootstrap": "^5.3.6",
     "bootstrap-icons": "^1.13.1",
     "face-api.js": "^0.22.2",
     "fire": "^0.55.1",

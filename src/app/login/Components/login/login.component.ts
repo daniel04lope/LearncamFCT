@@ -11,6 +11,7 @@ import {
 import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import * as faceapi from 'face-api.js';
+import { AuthStateService } from '../../Services/auth-state.service.service';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginComponent implements OnDestroy {
   private firestore = inject(Firestore);
   private router = inject(Router);
   private cd = inject(ChangeDetectorRef);
+  private authState = inject(AuthStateService);
 
   loginForm!: FormGroup;
   firebaseErrorMessage = '';
@@ -49,7 +51,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   // --- LOGIN TRADICIONAL ---
-  async onSubmit() {
+ async onSubmit() {
     this.firebaseErrorMessage = '';
     if (!this.loginForm.valid) {
       this.loginForm.markAllAsTouched();
@@ -58,7 +60,8 @@ export class LoginComponent implements OnDestroy {
     this.loading = true;
     const { email, password } = this.loginForm.value;
     try {
-      await signInWithEmailAndPassword(this.auth, email, password);
+      const cred = await signInWithEmailAndPassword(this.auth, email, password);
+      this.authState.setUser(cred.user); // ✅ guarda el usuario
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.firebaseErrorMessage = this.mapError(err);
@@ -70,8 +73,10 @@ export class LoginComponent implements OnDestroy {
   async loginWithGoogle() {
     this.firebaseErrorMessage = '';
     this.loading = true;
-    try {
-      await signInWithPopup(this.auth, new GoogleAuthProvider());
+       try {
+      const cred = await signInWithPopup(this.auth, new GoogleAuthProvider());
+      this.authState.setUser(cred.user); // cred.user.photoURL contiene la imagen
+
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.firebaseErrorMessage = this.mapError(err);
@@ -83,8 +88,9 @@ export class LoginComponent implements OnDestroy {
   async loginWithTwitter() {
     this.firebaseErrorMessage = '';
     this.loading = true;
-    try {
-      await signInWithPopup(this.auth, new TwitterAuthProvider());
+   try {
+      const cred = await signInWithPopup(this.auth, new TwitterAuthProvider());
+      this.authState.setUser(cred.user); // ✅
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.firebaseErrorMessage = this.mapError(err);
@@ -183,6 +189,7 @@ export class LoginComponent implements OnDestroy {
           // best.label es el email
           const user = this.usersData.find(u => u.email === best.label)!;
           await this.finishFaceLogin(user.email, user.password);
+          console.log('Usuario encontrado:', user.email);
         }
       }
     }, 1500);
@@ -191,7 +198,8 @@ export class LoginComponent implements OnDestroy {
   private async finishFaceLogin(email: string, password: string) {
     this.cancelFaceLogin();
     try {
-      await signInWithEmailAndPassword(this.auth, email, password);
+      const cred = await signInWithEmailAndPassword(this.auth, email, password);
+      this.authState.setUser(cred.user); // ✅
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.firebaseErrorMessage = this.mapError(err);
@@ -200,12 +208,20 @@ export class LoginComponent implements OnDestroy {
     }
   }
 
-  cancelFaceLogin() {
-    clearInterval(this.detectionInterval);
-    if (this.videoEl?.nativeElement?.srcObject) {
-      (this.videoEl.nativeElement.srcObject as MediaStream).getTracks().forEach(t => t.stop());
-    }
-    this.showVideoPreview = false;
-    this.loading = false;
+
+
+   cancelFaceLogin() {
+  clearInterval(this.detectionInterval);
+  if (this.videoEl?.nativeElement?.srcObject) {
+    (this.videoEl.nativeElement.srcObject as MediaStream)
+      .getTracks()
+      .forEach(t => t.stop());
   }
+  this.showVideoPreview = false;
+  this.loading = false;
 }
+
+  }
+
+
+
