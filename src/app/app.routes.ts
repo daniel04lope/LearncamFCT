@@ -36,6 +36,7 @@ import { RegisterComponent } from './registro/Components/registro/registro.compo
 import { RegistropaginaprincipalComponent } from './registro/pages/registropaginaprincipal/registropaginaprincipal.component';
 import { HistorialprincipalComponent } from './history/pages/historialprincipal/historialprincipal.component';
 import { FinishSignInComponent } from './login/Components/auth/finish-sign-in.component';
+import { AjustesprincipalComponent } from './config/pages/ajustesprincipal/ajustesprincipal.component';
 export const routes: Routes = [
   { path: '', component: MainpagesprincipalComponent },
   { path: 'temario', component: TemariopaginaprincipalComponent },
@@ -61,6 +62,7 @@ export const routes: Routes = [
   { path: 'temario/pilatesen-banda-elastica', component: PilatesenbandaelasticaprincipalComponent },
   { path: 'temario/pilatesen-casa', component: PilatesencasaprincipalComponent },
   { path: 'temario/ritmoslatinos', component: RitmoslatinosprincipalComponent },
+   { path: 'ajustes', component: AjustesprincipalComponent },
   { path: 'temario/tabataexpress', component: TabataexpressprincipalComponent },
   { path: 'temario/tabatatraining', component: TabatatrainingprincipalComponent },
   { path: 'temario/taichiavanzado', component: TaichiavanzadoprincipalComponent },

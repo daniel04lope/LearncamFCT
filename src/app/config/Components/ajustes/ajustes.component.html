@@ -1,0 +1,27 @@
+<div class="ajustes-container">
+  <h2>Ajustes</h2>
+
+  <label>
+    Tema:
+    <select [(ngModel)]="configuracion.tema">
+      <option value="claro">Claro</option>
+      <option value="oscuro">Oscuro</option>
+    </select>
+  </label>
+
+  <label>
+    Idioma:
+    <select [(ngModel)]="configuracion.idioma">
+      <option *ngFor="let idioma of idiomasDisponibles" [value]="idioma.codigo">
+        {{ idioma.nombre }}
+      </option>
+    </select>
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="configuracion.notificaciones" />
+    Notificaciones activadas
+  </label>
+
+  <button (click)="guardarConfiguracion()">Guardar</button>
+</div>
