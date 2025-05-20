@@ -1,6 +1,9 @@
 import { Component, inject, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { decrypt} from '../../../../util/encryption.util'
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import {
   Auth,
   signInWithEmailAndPassword,
@@ -149,26 +152,31 @@ export class LoginComponent implements OnDestroy {
     this.modelsLoaded = true;
   }
 
-  private async loadUsersDescriptors() {
-    const snap = await getDocs(collection(this.firestore, 'users'));
-    const labeled: faceapi.LabeledFaceDescriptors[] = [];
-    this.usersData = [];
+private async loadUsersDescriptors() {
+  const snap = await getDocs(collection(this.firestore, 'users'));
+  const labeled: faceapi.LabeledFaceDescriptors[] = [];
+  this.usersData = [];
 
-    for (const doc of snap.docs) {
-      const d = doc.data() as any;
-      if (Array.isArray(d.faceDescriptor) && d.faceDescriptor.length === 128 && d.password) {
-        const desc = new Float32Array(d.faceDescriptor as number[]);
-        labeled.push(new faceapi.LabeledFaceDescriptors(d.email, [desc]));
-        this.usersData.push({ email: d.email, password: d.password, descriptor: desc });
-      }
-    }
-
-    if (labeled.length) {
-      this.faceMatcher = new faceapi.FaceMatcher(labeled, 0.6);
-    } else {
-      this.faceMatcher = null;
+  for (const doc of snap.docs) {
+    const d = doc.data() as any;
+    if (Array.isArray(d.faceDescriptor) && d.faceDescriptor.length === 128 && d.password) {
+      const desc = new Float32Array(d.faceDescriptor as number[]);
+      const decryptedPassword = decrypt(d.password); // <--- Aquí desciframos
+      labeled.push(new faceapi.LabeledFaceDescriptors(d.email, [desc]));
+      this.usersData.push({ 
+        email: d.email, 
+        password: decryptedPassword, // <--- Guardamos descifrado
+        descriptor: desc 
+      });
     }
   }
+
+  if (labeled.length) {
+    this.faceMatcher = new faceapi.FaceMatcher(labeled, 0.6);
+  } else {
+    this.faceMatcher = null;
+  }
+}
 
   private async startCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 } });

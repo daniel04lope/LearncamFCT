@@ -67,9 +67,11 @@ header {
 /* BOX DE CARDS */
 .box {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* ← máximo 3 columnas */
   gap: 20px;
+  justify-items: center;
 }
+
 
 /* CARD STYLE */
 .card {
@@ -123,6 +125,9 @@ footer {
   .card span {
     font-size: 0.9rem;
   }
+   .box {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 480px) {
@@ -138,8 +143,9 @@ footer {
     margin-top: 10px;
   }
 
-  .box {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+ 
+ .box {
+    grid-template-columns: 1fr;
   }
 
   .card img {

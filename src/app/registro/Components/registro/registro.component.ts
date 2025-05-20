@@ -1,4 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { encrypt} from '../../../../util/encryption.util'
+
 import { Component, OnInit, inject, OnDestroy } from '@angular/core';
 import { 
   AbstractControl, 
@@ -139,51 +141,48 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  async onSubmit(): Promise<void> {
-    if (this.registerForm.invalid || this.submitting) return;
+async onSubmit(): Promise<void> {
+  if (this.registerForm.invalid || this.submitting) return;
 
-    this.submitting = true;
-    this.firebaseErrorMessage = '';
+  this.submitting = true;
+  this.firebaseErrorMessage = '';
 
-    const { name, email, password } = this.registerForm.value;
+  const { name, email, password } = this.registerForm.value;
+  const encryptedPassword = encrypt(password); // <--- Aquí ciframos
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        this.auth,
-        email,
-        password
-      );
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    );
 
-      await updateProfile(userCredential.user, { displayName: name });
+    await updateProfile(userCredential.user, { displayName: name });
 
-      // Guardar datos en Firestore
- const userDocRef = doc(this.firestore, 'users', userCredential.user.uid);
-await setDoc(userDocRef, {
-  uid: userCredential.user.uid,
-  displayName: name,
-  email: email,
-  password: password,
-  faceDescriptor: this.faceDescriptor,
-  registrationDate: new Date(),
-  lastLogin: new Date(),
+    const userDocRef = doc(this.firestore, 'users', userCredential.user.uid);
+    await setDoc(userDocRef, {
+      uid: userCredential.user.uid,
+      displayName: name,
+      email: email,
+      password: encryptedPassword, // <--- Guardamos cifrado
+      faceDescriptor: this.faceDescriptor,
+      registrationDate: new Date(),
+      lastLogin: new Date(),
+      historial: [{
+        accion: 'Registro de usuario',
+        fecha: new Date().toISOString(),
+        detalle: 'Usuario registrado por primera vez.'
+      }]
+    });
 
-  // Historial de acciones
-  historial: [
-    {
-      accion: 'Registro de usuario',
-      fecha: new Date().toISOString(),
-      detalle: 'Usuario registrado por primera vez.'
-    }
-  ]
-});
-
-      this.handleRegistrationSuccess();
-    } catch (error: any) {
-      this.handleRegistrationError(error);
-    } finally {
-      this.submitting = false;
-    }
+    this.handleRegistrationSuccess();
+  } catch (error: any) {
+    this.handleRegistrationError(error);
+  } finally {
+    this.submitting = false;
   }
+}
+
 
   private passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value || '';
