@@ -188,7 +188,7 @@ async onSubmit(): Promise<void> {
     const value = control.value || '';
     const errors: ValidationErrors = {};
     
-    if (value.length < 8) errors['minLength'] = true;
+    if (value.length < 6) errors['minLength'] = true;
     if (!/[A-Z]/.test(value)) errors['uppercase'] = true;
     if (!/[0-9]/.test(value)) errors['number'] = true;
     if (!/[^A-Za-z0-9]/.test(value)) errors['symbol'] = true;

@@ -1,6 +1,8 @@
 import { Component, inject, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { getAuth, sendPasswordResetEmail, sendSignInLinkToEmail, updatePassword } from 'firebase/auth';
+
 import { CommonModule } from '@angular/common';
-import { decrypt} from '../../../../util/encryption.util'
+import { decrypt, encrypt} from '../../../../util/encryption.util'
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -15,6 +17,7 @@ import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import * as faceapi from 'face-api.js';
 import { AuthStateService } from '../../Services/auth-state.service.service';
+import { doc, updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +32,9 @@ export class LoginComponent implements OnDestroy {
   private router = inject(Router);
   private cd = inject(ChangeDetectorRef);
   private authState = inject(AuthStateService);
+  resetEmail = '';
+  resetMessage = '';
+
 
   loginForm!: FormGroup;
   firebaseErrorMessage = '';
@@ -45,7 +51,7 @@ export class LoginComponent implements OnDestroy {
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -87,6 +93,28 @@ export class LoginComponent implements OnDestroy {
       this.loading = false;
     }
   }
+
+
+sendResetEmail(event: Event): void {
+  event.preventDefault(); // ⛔️ Evita que el enlace recargue la página
+
+  const email = this.loginForm.get('email')?.value;
+
+  if (!email) {
+    this.firebaseErrorMessage = 'Por favor, introduce tu correo electrónico para restablecer la contraseña.';
+    return;
+  }
+
+  sendPasswordResetEmail(this.auth, email)
+    .then(() => {
+      this.firebaseErrorMessage = '📧 Correo de recuperación enviado. Revisa tu bandeja de entrada.';
+    })
+    .catch(error => {
+      console.error('Error al enviar correo de recuperación:', error);
+      this.firebaseErrorMessage = this.mapError(error);
+    });
+}
+
 
   async loginWithTwitter() {
     this.firebaseErrorMessage = '';
@@ -184,6 +212,7 @@ private async loadUsersDescriptors() {
     await this.videoEl.nativeElement.play();
   }
 
+
   private startDetectionLoop() {
     this.detectionInterval = window.setInterval(async () => {
       const det = await faceapi
@@ -194,25 +223,34 @@ private async loadUsersDescriptors() {
       if (det && this.faceMatcher) {
         const best = this.faceMatcher.findBestMatch(det.descriptor);
         if (best.label !== 'unknown') {
-          // best.label es el email
           const user = this.usersData.find(u => u.email === best.label)!;
-          await this.finishFaceLogin(user.email, user.password);
+          await this.finishFaceLogin(user.email);  // <-- Solo email, no password
           console.log('Usuario encontrado:', user.email);
         }
       }
     }, 1500);
   }
 
-  private async finishFaceLogin(email: string, password: string) {
+   private async finishFaceLogin(email: string) {
     this.cancelFaceLogin();
+    this.loading = true;
+
     try {
-      const cred = await signInWithEmailAndPassword(this.auth, email, password);
-      this.authState.setUser(cred.user); // ✅
-      this.router.navigate(['/dashboard']);
+      const actionCodeSettings = {
+        url: window.location.origin + '/finishSignIn', // URL donde el usuario completará login
+        handleCodeInApp: true,
+      };
+
+      // Guardar el email para usar después al confirmar el enlace
+      window.localStorage.setItem('emailForSignIn', email);
+
+      await sendSignInLinkToEmail(this.auth, email, actionCodeSettings);
+      this.firebaseErrorMessage = `Te hemos enviado un enlace de inicio de sesión a ${email}. Revisa tu correo para continuar.`;
     } catch (err: any) {
       this.firebaseErrorMessage = this.mapError(err);
     } finally {
       this.loading = false;
+      this.showVideoPreview = false;
     }
   }
 

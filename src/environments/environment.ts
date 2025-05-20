@@ -1,3 +1,4 @@
+import { initializeApp } from 'firebase/app';
 export const environment = {
   production: false,
   firebase: {
@@ -11,7 +12,6 @@ export const environment = {
 
     appId: "1:742667960354:web:06e2a14e2e2e8d0e9cca7b"
   }
-
 
   
 };

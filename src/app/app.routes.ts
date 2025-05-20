@@ -35,6 +35,7 @@ import { LoginprincipalComponent } from './login/Pages/loginprincipal/loginprinc
 import { RegisterComponent } from './registro/Components/registro/registro.component';
 import { RegistropaginaprincipalComponent } from './registro/pages/registropaginaprincipal/registropaginaprincipal.component';
 import { HistorialprincipalComponent } from './history/pages/historialprincipal/historialprincipal.component';
+import { FinishSignInComponent } from './login/Components/auth/finish-sign-in.component';
 export const routes: Routes = [
   { path: '', component: MainpagesprincipalComponent },
   { path: 'temario', component: TemariopaginaprincipalComponent },
@@ -64,6 +65,7 @@ export const routes: Routes = [
   { path: 'temario/tabatatraining', component: TabatatrainingprincipalComponent },
   { path: 'temario/taichiavanzado', component: TaichiavanzadoprincipalComponent },
   { path: 'temario/taichibasico', component: TaichibasicoprincipalComponent },
+  {  path: 'finishSignIn',component: FinishSignInComponent},
   { path: 'temario/temariopagina', component: TemariopaginaprincipalComponent },
   { path: 'temario/yoga-paraexpertos', component: YogaparaexpertosprincipalComponent },
   { path: 'temario/yoga-paraprincipiantes', component: YogaparaprincipiantesprincipalComponent },
