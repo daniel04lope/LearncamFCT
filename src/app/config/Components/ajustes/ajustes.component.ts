@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TraduccionService } from '../../../service/traduccion.service'; // Asegúrate del path
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 interface Configuracion {
   tema: 'claro' | 'oscuro';
@@ -12,7 +15,7 @@ interface Configuracion {
   templateUrl: './ajustes.component.html',
   styleUrls: ['./ajustes.component.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, HttpClientModule,CommonModule]
 })
 export class AjustesComponent implements OnInit {
 
@@ -28,20 +31,56 @@ export class AjustesComponent implements OnInit {
     { codigo: 'fr', nombre: 'Francés' }
   ];
 
-  constructor() { }
+  constructor(private traduccionService: TraduccionService) { }
 
   ngOnInit(): void {
-    // Aquí podrías cargar configuraciones guardadas, por ejemplo de localStorage
     const configGuardada = localStorage.getItem('configuracion');
     if (configGuardada) {
       this.configuracion = JSON.parse(configGuardada);
+      this.traducirPagina();
     }
   }
+  cambiarIdioma(idioma: string) {
+  const frame = (window as any).google?.translate?.TranslateElement?.impl?.instance;
+  if (frame) {
+    frame.setLanguage(idioma);
+  } else {
+    console.warn('Google Translate aún no está disponible');
+  }
+}
+
 
   guardarConfiguracion() {
     localStorage.setItem('configuracion', JSON.stringify(this.configuracion));
     alert('Configuración guardada!');
-    // Aquí también puedes emitir un evento o llamar a un servicio para aplicar cambios globales
+    this.traducirPagina();
   }
+
+traducirPagina() {
+  const idiomaDestino = this.configuracion.idioma;
+
+  const googleLangMap: { [key: string]: string } = {
+    'es': 'es',
+    'en': 'en',
+    'fr': 'fr'
+  };
+
+  const lang = googleLangMap[idiomaDestino];
+
+  const intentarTraducir = () => {
+    const select = document.querySelector<HTMLSelectElement>('.goog-te-combo');
+    if (select) {
+      select.value = lang;
+      select.dispatchEvent(new Event('change'));
+      console.log('Idioma cambiado a:', lang);
+    } else {
+      console.warn('Esperando a que Google Translate esté listo...');
+      setTimeout(intentarTraducir, 500); // Reintenta cada 500ms
+    }
+  };
+
+  intentarTraducir();
+}
+
 
 }

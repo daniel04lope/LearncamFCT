@@ -7,6 +7,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <div id="google_translate_element"></div>
+
+
+  <script>
+  function ocultarWidgetGoogleTranslate() {
+    // Elimina el banner superior
+    const frame = document.querySelector('.goog-te-banner-frame');
+    if (frame) frame.remove();
+
+    // Elimina iframe flotante
+    const balloon = document.querySelector('.goog-te-balloon-frame');
+    if (balloon) balloon.remove();
+
+    // Restaura el body si fue empujado
+    document.body.style.top = '0px';
+
+    // Oculta menú desplegable si aparece
+    const menuFrame = document.querySelector('.goog-te-menu-frame');
+    if (menuFrame) menuFrame.style.display = 'none';
+  }
+
+  // Reintenta cada medio segundo por si se vuelve a inyectar
+  setInterval(ocultarWidgetGoogleTranslate, 500);
+</script>
+
+<div id="google_translate_element" style="display: none;"></div>
+
+<!-- Google Translate (Oculto) -->
+<div id="google_translate_element" style="display: none;"></div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'es',
+      autoDisplay: false
+    }, 'google_translate_element');
+  }
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<style>
+  #google_translate_element,
+  .goog-te-banner-frame,
+  .goog-te-menu-frame,
+  .goog-te-gadget,
+  .goog-te-gadget-simple,
+  .goog-te-balloon-frame,
+  #goog-gt-tt,
+  .goog-tooltip,
+  .goog-text-highlight {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+    z-index: -9999 !important;
+  }
+
+  body {
+    top: 0px !important; /* Corrige si Google mueve el body */
+  }
+</style>
+
+
 </head>
 <body id="cuerpo">
   <app-root></app-root>

@@ -9,14 +9,18 @@
     </select>
   </label>
 
-  <label>
-    Idioma:
-    <select [(ngModel)]="configuracion.idioma">
-      <option *ngFor="let idioma of idiomasDisponibles" [value]="idioma.codigo">
-        {{ idioma.nombre }}
-      </option>
-    </select>
-  </label>
+<label>
+  Idioma:
+ <select [(ngModel)]="configuracion.idioma" (change)="cambiarIdioma(configuracion.idioma)">
+  <option value="es">Español</option>
+  <option value="en">Inglés</option>
+  <option value="fr">Francés</option>
+</select>
+
+</label>
+
+
+
 
   <label>
     <input type="checkbox" [(ngModel)]="configuracion.notificaciones" />
