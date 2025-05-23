@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TraduccionService } from '../../../service/traduccion.service'; // Asegúrate del path
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { TraduccionService } from '../../../service/traduccion.service';
+
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
 interface Configuracion {
   tema: 'claro' | 'oscuro';
@@ -15,7 +18,7 @@ interface Configuracion {
   templateUrl: './ajustes.component.html',
   styleUrls: ['./ajustes.component.css'],
   standalone: true,
-  imports: [FormsModule, HttpClientModule,CommonModule]
+  imports: [FormsModule, HttpClientModule, CommonModule]
 })
 export class AjustesComponent implements OnInit {
 
@@ -24,6 +27,8 @@ export class AjustesComponent implements OnInit {
     idioma: 'es',
     notificaciones: true
   };
+
+  fotoBase64: string | null = null;
 
   idiomasDisponibles = [
     { codigo: 'es', nombre: 'Español' },
@@ -39,48 +44,105 @@ export class AjustesComponent implements OnInit {
       this.configuracion = JSON.parse(configGuardada);
       this.traducirPagina();
     }
-  }
-  cambiarIdioma(idioma: string) {
-  const frame = (window as any).google?.translate?.TranslateElement?.impl?.instance;
-  if (frame) {
-    frame.setLanguage(idioma);
-  } else {
-    console.warn('Google Translate aún no está disponible');
-  }
-}
 
-
-  guardarConfiguracion() {
-    localStorage.setItem('configuracion', JSON.stringify(this.configuracion));
-    alert('Configuración guardada!');
-    this.traducirPagina();
-  }
-
-traducirPagina() {
-  const idiomaDestino = this.configuracion.idioma;
-
-  const googleLangMap: { [key: string]: string } = {
-    'es': 'es',
-    'en': 'en',
-    'fr': 'fr'
-  };
-
-  const lang = googleLangMap[idiomaDestino];
-
-  const intentarTraducir = () => {
-    const select = document.querySelector<HTMLSelectElement>('.goog-te-combo');
-    if (select) {
-      select.value = lang;
-      select.dispatchEvent(new Event('change'));
-      console.log('Idioma cambiado a:', lang);
-    } else {
-      console.warn('Esperando a que Google Translate esté listo...');
-      setTimeout(intentarTraducir, 500); // Reintenta cada 500ms
+    // Cargar fotoBase64 guardada de Firestore
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      this.cargarFotoPerfil(user.uid);
     }
-  };
+  }
 
-  intentarTraducir();
-}
+  async cargarFotoPerfil(uid: string) {
+    const db = getFirestore();
+    const userRef = doc(db, 'users', uid);
+    try {
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data['fotoPerfil']) {
+          this.fotoBase64 = data['fotoPerfil'];
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar foto de perfil:', error);
+    }
+  }
 
+  cambiarIdioma(idioma: string) {
+    const frame = (window as any).google?.translate?.TranslateElement?.impl?.instance;
+    if (frame) {
+      frame.setLanguage(idioma);
+    } else {
+      console.warn('Google Translate aún no está disponible');
+    }
+  }
 
+  get fotoURL(): string | null {
+    return this.fotoBase64;
+  }
+
+  traducirPagina() {
+    const idiomaDestino = this.configuracion.idioma;
+    const googleLangMap: { [key: string]: string } = {
+      'es': 'es',
+      'en': 'en',
+      'fr': 'fr'
+    };
+    const lang = googleLangMap[idiomaDestino];
+
+    const intentarTraducir = () => {
+      const select = document.querySelector<HTMLSelectElement>('.goog-te-combo');
+      if (select) {
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+        console.log('Idioma cambiado a:', lang);
+      } else {
+        console.warn('Esperando a que Google Translate esté listo...');
+        setTimeout(intentarTraducir, 500);
+      }
+    };
+
+    intentarTraducir();
+  }
+
+  onFotoSeleccionada(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fotoBase64 = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async guardarConfiguracion() {
+    localStorage.setItem('configuracion', JSON.stringify(this.configuracion));
+    this.traducirPagina();
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+      alert('Debes iniciar sesión');
+      return;
+    }
+
+    const db = getFirestore();
+    const userRef = doc(db, 'users', user.uid);
+
+    const dataToSave = {
+      configuracion: this.configuracion,
+      fotoPerfil: this.fotoBase64 || null
+    };
+
+    try {
+      await setDoc(userRef, dataToSave, { merge: true });
+      alert('Configuración guardada correctamente');
+    } catch (err) {
+      console.error('Error guardando en Firestore:', err);
+      alert('Hubo un problema al guardar');
+    }
+  }
 }

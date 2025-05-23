@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthStateService } from '../../../login/Services/auth-state.service.service';
 import { User } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
 @Component({
   selector: 'app-cabecera',
@@ -18,15 +19,34 @@ export class CabeceraComponent implements OnInit, OnDestroy {
 
   terminoBusqueda: string = '';
   usuario: User | null = null;
-userName: string | null = null;
+  userName: string | null = null;
   userPhoto: string = 'assets/perfil.png';
   
   private sub!: Subscription;
 
- constructor(private router: Router, private authState: AuthStateService) {
-  this.authState.user$.subscribe(user => {
+  constructor(private router: Router, private authState: AuthStateService) {}
+
+ngOnInit(): void {
+  this.sub = this.authState.user$.subscribe(async user => {
     if (user) {
-      this.userPhoto = user.photoURL || 'assets/perfil.png';
+      const db = getFirestore();
+      const userRef = doc(db, 'users', user.uid);
+      try {
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data['fotoPerfil']) {
+            this.userPhoto = data['fotoPerfil'];
+          } else {
+            this.userPhoto = user.photoURL ? user.photoURL : 'assets/perfil.png';
+          }
+        } else {
+          this.userPhoto = user.photoURL ? user.photoURL : 'assets/perfil.png';
+        }
+      } catch (error) {
+        console.error('Error al cargar foto de perfil en cabecera:', error);
+        this.userPhoto = user.photoURL ? user.photoURL : 'assets/perfil.png';
+      }
       this.userName = user.displayName || user.email || 'Usuario';
     } else {
       this.userPhoto = 'assets/perfil.png';
@@ -35,23 +55,10 @@ userName: string | null = null;
   });
 }
 
-  ngOnInit(): void {
-    // 🔁 Suscribirse al estado del usuario (reacciona a cambios)
-    this.sub = this.authState.user$.subscribe(user => {
-      this.usuario = user;
-      if (user) {
-        this.userName = user.displayName || user.email || 'Usuario';
-        this.userPhoto = user.photoURL || 'assets/perfil.png';
-      } else {
-        this.userName = '';
-        this.userPhoto = 'assets/perfil.png';
-      }
-    });
-  }
+ngOnDestroy(): void {
+  this.sub?.unsubscribe();
+}
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
-  }
 
   onBuscar() {
     this.buscar.emit(this.terminoBusqueda);
@@ -62,7 +69,6 @@ userName: string | null = null;
   }
 
   logout() {
-  this.authState.logout();
-}
-
+    this.authState.logout();
+  }
 }

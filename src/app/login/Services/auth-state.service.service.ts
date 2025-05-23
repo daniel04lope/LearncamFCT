@@ -3,10 +3,12 @@ import { Auth, onAuthStateChanged, signOut, User } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 
+
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
   private userSubject = new BehaviorSubject<User | null>(null);
   user$ = this.userSubject.asObservable();
+  
 
   private auth = inject(Auth);
   private router = inject(Router); // ✅ Inyectamos el Router
@@ -16,6 +18,14 @@ export class AuthStateService {
     onAuthStateChanged(this.auth, (user) => {
       this.userSubject.next(user);
     });
+  }
+
+    async recargarUsuario() {
+    const user = this.currentUser;
+    if (user) {
+      await user.reload();  // recarga datos desde Firebase
+      this.userSubject.next(this.auth.currentUser); // emite usuario actualizado
+    }
   }
 
   setUser(user: User) {

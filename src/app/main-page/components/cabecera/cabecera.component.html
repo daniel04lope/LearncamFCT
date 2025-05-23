@@ -45,12 +45,14 @@
           <a class="nav-link dropdown-toggle p-0 d-flex align-items-center justify-content-center"
              href="#" role="button" id="dropdownUserMenu"
              data-bs-toggle="dropdown" aria-expanded="false">
-            <img [src]="userPhoto"
-                 alt="Perfil"
-                 width="40"
-                 height="40"
-                 class="rounded-circle border border-2 border-light shadow-sm"
-                 style="object-fit: cover;">
+           <img [src]="userPhoto"
+     (error)="userPhoto = 'assets/perfil.png'"
+     alt="Perfil"
+     width="40"
+     height="40"
+     class="rounded-circle border border-2 border-light shadow-sm"
+     style="object-fit: cover;">
+
             <span class="ms-2 fw-semibold text-white d-none d-md-inline">{{ userName }}</span>
           </a>
 

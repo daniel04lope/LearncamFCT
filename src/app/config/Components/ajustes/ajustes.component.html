@@ -19,6 +19,15 @@
 
 </label>
 
+<label>
+  Foto de perfil:
+  <input type="file" (change)="onFotoSeleccionada($event)" accept="image/*" />
+</label>
+
+
+<img *ngIf="fotoBase64" [src]="fotoBase64" alt="Previsualización" width="100" height="100" class="mt-2 rounded-circle border">
+
+
 
 
 
