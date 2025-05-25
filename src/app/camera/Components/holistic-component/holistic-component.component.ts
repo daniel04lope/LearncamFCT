@@ -1,10 +1,12 @@
 // src/app/holistic-component/holistic-component.component.ts
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import Splitting from 'splitting';
 import { Holistic, Results } from '@mediapipe/holistic';
 import { CommonModule } from '@angular/common';
 
-// Interfaces para tipos
+declare var SpeechSynthesisUtterance: any;
+declare var speechSynthesis: any;
+
 interface Pose {
   name: string;
   description: string;
@@ -19,6 +21,7 @@ interface Exercise {
   name: string;
   instructions: string;
   targetPoses: Pose[];
+  visualAid?: string;
 }
 
 const FACEMESH_CONNECTIONS: [number, number][] = [
@@ -31,37 +34,40 @@ const POSE_CONNECTIONS: [number, number][] = [
   [23, 25], [25, 27], [24, 26], [26, 28], [27, 29], [29, 31], [28, 30], [30, 32]
 ];
 
-// Servicio de ejercicios (simulado)
 class PoseService {
   private currentExerciseIndex = 0;
   private exercises: Exercise[] = [
     {
       id: 1,
-      name: 'Postura de T',
-      instructions: 'Levanta los brazos formando una T con tu cuerpo',
+      name: 'Brazo Derecho',
+      instructions: 'Levanta el brazo derecho hasta formar un ángulo de 90 grados',
+      visualAid: '⬆️ Brazo Derecho',
       targetPoses: [{
-        name: 'T-Pose',
-        description: 'Brazos extendidos horizontalmente',
-        targetPose: [
-          {x: 0.5, y: 0.1},  // Nariz
-          {x: 0.3, y: 0.5},   // Hombro izquierdo
-          {x: 0.7, y: 0.5},   // Hombro derecho
-          {x: 0.1, y: 0.5},   // Codo izquierdo
-          {x: 0.9, y: 0.5}    // Codo derecho
-        ]
+        name: 'RightArmUp',
+        description: 'Brazo derecho levantado',
+        targetPose: []
       }]
     },
     {
       id: 2,
-      name: 'Postura de árbol',
-      instructions: 'Levanta un brazo hacia arriba y mantén el equilibrio',
+      name: 'Brazo Izquierdo',
+      instructions: 'Levanta el brazo izquierdo a la altura del hombro',
+      visualAid: '⬆️ Brazo Izquierdo',
       targetPoses: [{
-        name: 'Tree-Pose',
-        description: 'Brazo derecho extendido verticalmente',
-        targetPose: [
-          {x: 0.5, y: 0.1},  // Nariz
-          {x: 0.5, y: 0.9}   // Muñeca derecha
-        ]
+        name: 'LeftArmUp',
+        description: 'Brazo izquierdo levantado',
+        targetPose: []
+      }]
+    },
+    {
+      id: 3,
+      name: 'Ambos Brazos',
+      instructions: 'Levanta ambos brazos formando una "Y" con tu cuerpo',
+      visualAid: '🎯 Ambos Brazos Arriba',
+      targetPoses: [{
+        name: 'BothArmsUp',
+        description: 'Ambos brazos levantados',
+        targetPose: []
       }]
     }
   ];
@@ -73,6 +79,14 @@ class PoseService {
   nextExercise(): void {
     this.currentExerciseIndex = (this.currentExerciseIndex + 1) % this.exercises.length;
   }
+
+  isLastExercise(): boolean {
+    return this.currentExerciseIndex === this.exercises.length - 1;
+  }
+
+  getTotalExercises(): number {
+    return this.exercises.length;
+  }
 }
 
 @Component({
@@ -82,7 +96,7 @@ class PoseService {
   styleUrls: ['./holistic-component.component.scss'],
   standalone: true
 })
-export class HolisticComponent implements OnInit, AfterViewInit {
+export class HolisticComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   @ViewChild('outputCanvas') outputCanvas!: ElementRef<HTMLCanvasElement>;
 
@@ -92,14 +106,24 @@ export class HolisticComponent implements OnInit, AfterViewInit {
   private mediaStream: MediaStream | null = null;
   private animationFrameId: number | null = null;
   private poseService = new PoseService();
-  
-  currentPose!: Pose;
-  exerciseInstructions: string = '';
-  similarityThreshold: number = 0.7; // 70% de similitud requerida
-  currentSimilarity: number = 0;
+  private synth = window.speechSynthesis;
+  private utterance = new SpeechSynthesisUtterance();
+ private lastTtsTime: number = 0;
+  private readonly ttsCooldown: number = 3000; // 3 segundos de cooldown 
+  currentExercise!: Exercise;
+  instructionText: string = '';
+  visualAidText: string = '';
   showFeedback: boolean = false;
   feedbackMessage: string = '';
-  feedbackColor: string = 'green';
+  feedbackColor: string = '#4CAF50';
+  progress: number = 0;
+  countdown: number = 3;
+  private countdownInterval: any;
+  private instructionRepeatTimer: any;
+  private lastActivityTime: number = Date.now();
+  isUserVisible: boolean = false;
+  private initialInstructionsGiven: boolean = false;
+  private userVisibilityCheckInterval: any;
   consecutiveCorrectFrames: number = 0;
 
   constructor() {}
@@ -114,6 +138,11 @@ export class HolisticComponent implements OnInit, AfterViewInit {
     this.setupCanvas();
   }
 
+  ngOnDestroy(): void {
+    this.stopProcessing();
+    this.clearTimers();
+  }
+
   private setupCanvas(): void {
     const canvas = this.outputCanvas.nativeElement;
     canvas.width = window.innerWidth;
@@ -121,9 +150,54 @@ export class HolisticComponent implements OnInit, AfterViewInit {
   }
 
   private loadExercise(): void {
-    const exercise = this.poseService.getCurrentExercise();
-    this.exerciseInstructions = exercise.instructions;
-    this.currentPose = exercise.targetPoses[0];
+    this.currentExercise = this.poseService.getCurrentExercise();
+    this.instructionText = this.currentExercise.instructions;
+    this.visualAidText = this.currentExercise.visualAid || '';
+    this.updateProgress();
+  }
+
+  private startCountdown(): void {
+    this.countdown = 3;
+    this.speak(`Ejercicio ${this.currentExercise.id}: ${this.currentExercise.instructions}`);
+    
+    this.countdownInterval = setInterval(() => {
+      if (this.countdown > 0) {
+        this.speak(this.countdown.toString());
+        this.countdown--;
+      } else {
+        clearInterval(this.countdownInterval);
+        this.speak('¡Comienza!');
+        this.startActivityMonitoring();
+      }
+    }, 1000);
+  }
+
+  private startActivityMonitoring(): void {
+    this.instructionRepeatTimer = setInterval(() => {
+      const inactiveTime = Date.now() - this.lastActivityTime;
+      if (inactiveTime > 120000) {
+        this.speak(this.currentExercise.instructions);
+        this.lastActivityTime = Date.now();
+      }
+    }, 30000);
+  }
+
+  private updateProgress(): void {
+    this.progress = (this.currentExercise.id / this.poseService.getTotalExercises()) * 100;
+  }
+
+   private speak(text: string): void {
+    const now = Date.now();
+    if (now - this.lastTtsTime < this.ttsCooldown) return;
+
+    if (this.synth.speaking) {
+      this.synth.cancel();
+    }
+    this.utterance.text = text;
+    this.utterance.lang = 'es-ES';
+    this.utterance.rate = 0.9;
+    this.synth.speak(this.utterance);
+    this.lastTtsTime = now;
   }
 
   setupHolistic(): void {
@@ -146,8 +220,20 @@ export class HolisticComponent implements OnInit, AfterViewInit {
     try {
       this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
       this.video.nativeElement.srcObject = this.mediaStream;
+      
+      await new Promise((resolve) => {
+        this.video.nativeElement.onloadeddata = resolve;
+      });
+      
       await this.video.nativeElement.play();
       this.isCameraLoading = false;
+
+      this.userVisibilityCheckInterval = setInterval(() => {
+        if (this.isUserVisible && !this.initialInstructionsGiven) {
+          this.startCountdown();
+          this.initialInstructionsGiven = true;
+        }
+      }, 1000);
 
       const loop = async () => {
         if (this.video.nativeElement.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
@@ -162,71 +248,139 @@ export class HolisticComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private checkPoseSimilarity(currentLandmarks: any[], targetLandmarks: any[]): number {
-    if (!targetLandmarks || targetLandmarks.length === 0) return 0;
-    
-    let totalSimilarity = 0;
-    for (let i = 0; i < targetLandmarks.length; i++) {
-      const current = currentLandmarks[i];
-      const target = targetLandmarks[i];
-      if (!current || !target) continue;
-      
-      const dx = current.x - target.x;
-      const dy = current.y - target.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      totalSimilarity += 1 - Math.min(distance * 2, 1); // Normalizar a 0-1
-    }
-    
-    return totalSimilarity / targetLandmarks.length;
+  private checkUserVisibility(landmarks: any): boolean {
+    return !!landmarks.pose?.length && landmarks.pose.some((l: any) => l.visibility > 0.5);
   }
 
-  private updateFeedback(similarity: number): void {
-    this.currentSimilarity = similarity;
+  private checkPose(landmarks: any): { correct: boolean, hint: string } {
+    const pose = landmarks.pose;
+    if (!pose || pose.length < 32) return { correct: false, hint: '' };
+
+    const LEFT_SHOULDER = 11;
+    const RIGHT_SHOULDER = 12;
+    const LEFT_WRIST = 15;
+    const RIGHT_WRIST = 16;
+
+    const currentExercise = this.currentExercise.targetPoses[0].name;
     
-    if (similarity >= this.similarityThreshold) {
+    let correct = false;
+    let hint = '';
+    
+    switch (currentExercise) {
+      case 'RightArmUp':
+        correct = pose[RIGHT_WRIST].y < pose[RIGHT_SHOULDER].y;
+        hint = correct ? '' : 'Levanta más el brazo derecho';
+        break;
+        
+      case 'LeftArmUp':
+        correct = pose[LEFT_WRIST].y < pose[LEFT_SHOULDER].y;
+        hint = correct ? '' : 'Levanta más el brazo izquierdo';
+        break;
+        
+      case 'BothArmsUp':
+        const rightCorrect = pose[RIGHT_WRIST].y < pose[RIGHT_SHOULDER].y;
+        const leftCorrect = pose[LEFT_WRIST].y < pose[LEFT_SHOULDER].y;
+        correct = rightCorrect && leftCorrect;
+        
+        if (!correct) {
+          if (!rightCorrect && !leftCorrect) {
+            hint = 'Levanta ambos brazos más alto';
+          } else if (!rightCorrect) {
+            hint = 'Levanta más el brazo derecho';
+          } else {
+            hint = 'Levanta más el brazo izquierdo';
+          }
+        }
+        break;
+    }
+
+    return { correct, hint };
+  }
+
+  private updateFeedback(result: { correct: boolean, hint: string }): void {
+    if (result.correct) {
       this.consecutiveCorrectFrames++;
-      if (this.consecutiveCorrectFrames > 30) { // ~1 segundo a 30fps
-        this.feedbackMessage = '¡Correcto!';
-        this.feedbackColor = 'green';
-        this.showFeedback = true;
-        setTimeout(() => {
-          this.poseService.nextExercise();
-          this.loadExercise();
-          this.consecutiveCorrectFrames = 0;
-          this.showFeedback = false;
-        }, 2000);
+      this.lastActivityTime = Date.now();
+      
+      if (this.consecutiveCorrectFrames > 30) {
+        this.handleCorrectPose();
       }
     } else {
       this.consecutiveCorrectFrames = 0;
-      if (similarity < 0.4) {
-        this.feedbackMessage = 'Mueve un poco más...';
-        this.feedbackColor = 'orange';
-      } else {
-        this.feedbackMessage = '¡Sigue así!';
-        this.feedbackColor = 'yellow';
+      if (result.hint) {
+        this.showVisualHint(result.hint);
+        const now = Date.now();
+        if (now - this.lastTtsTime >= this.ttsCooldown) {
+          this.speak(result.hint);
+        }
       }
-      this.showFeedback = true;
     }
   }
+
+  private showVisualHint(hint: string): void {
+    this.feedbackMessage = hint;
+    this.feedbackColor = '#FFC107';
+    this.showFeedback = true;
+  }
+
+  private handleCorrectPose(): void {
+    this.speak('¡Correcto!');
+    this.showCompletionMessage();
+
+    if (this.poseService.getCurrentExercise().id === 3) {
+      this.handleFinalExercise();
+    } else {
+      setTimeout(() => {
+        this.poseService.nextExercise();
+        this.loadExercise();
+        this.initialInstructionsGiven = false;
+      }, 2000);
+    }
+    
+    this.consecutiveCorrectFrames = 0;
+  }
+
+  private showCompletionMessage(): void {
+    this.feedbackMessage = '¡Postura correcta!';
+    this.feedbackColor = '#4CAF50';
+    this.showFeedback = true;
+    setTimeout(() => this.showFeedback = false, 2000);
+  }
+
+ private handleFinalExercise(): void {
+  setTimeout(() => {
+    this.stopProcessing();
+    this.feedbackMessage = '¡Lección completada!';
+    this.showFeedback = true;
+    this.speak('Recorrido terminado. ¡Buen trabajo! Has completado todos los ejercicios.');
+    this.currentExercise = {
+      id: 4,
+      name: 'Completado',
+      instructions: 'Todos los ejercicios finalizados',
+      targetPoses: [],
+      visualAid: '✅ ¡Bien hecho!'
+    };
+    this.instructionText = 'Ejercicios completados con éxito';
+    this.visualAidText = '🎉 ¡Felicidades!';
+    this.progress = 100;
+  }, 2000);
+}
 
   processFrame(results: Results): void {
     const canvas = this.outputCanvas.nativeElement;
     const ctx = canvas.getContext('2d');
     if (!ctx || !results.image) return;
 
+    this.isUserVisible = this.checkUserVisibility(results);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dibujar imagen de la cámara
     ctx.save();
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
     ctx.restore();
 
-    // Dibujar esqueleto de referencia
-    this.drawTargetPose(ctx);
-
-    // Procesar landmarks
     const landmarks = {
       pose: results.poseLandmarks,
       face: results.faceLandmarks,
@@ -234,94 +388,102 @@ export class HolisticComponent implements OnInit, AfterViewInit {
       rightHand: results.rightHandLandmarks
     };
 
-    // Dibujar landmarks del usuario
+    this.drawVisualGuide(ctx);
     this.drawUserLandmarks(ctx, landmarks);
 
-    // Verificar similitud
-    if (this.currentPose.targetPose) {
-      const similarity = this.checkPoseSimilarity(
-        landmarks.pose || [], 
-        this.currentPose.targetPose
-      );
-      this.updateFeedback(similarity);
-    }
-
-    // Mostrar feedback
-    if (this.showFeedback) {
-      ctx.fillStyle = this.feedbackColor;
-      ctx.font = '30px Arial';
-      ctx.fillText(this.feedbackMessage, 20, 50);
-      
-      // Barra de progreso
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
-      ctx.fillRect(20, 70, 200, 20);
-      ctx.fillStyle = this.feedbackColor;
-      ctx.fillRect(20, 70, 200 * this.currentSimilarity, 20);
-    }
+    const poseResult = this.checkPose(landmarks);
+    this.updateFeedback(poseResult);
+    this.drawUI(ctx);
   }
 
-  private drawTargetPose(ctx: CanvasRenderingContext2D): void {
-    if (!this.currentPose.targetPose) return;
-    
-    ctx.strokeStyle = 'rgba(200, 0, 200, 0.5)';
+  private drawVisualGuide(ctx: CanvasRenderingContext2D): void {
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
     ctx.lineWidth = 4;
     
-    this.currentPose.targetPose.forEach(point => {
-      ctx.beginPath();
-      ctx.arc(
-        point.x * ctx.canvas.width, 
-        point.y * ctx.canvas.height, 
-        10, 0, 2 * Math.PI
-      );
-      ctx.stroke();
-    });
+    const currentPose = this.currentExercise.targetPoses[0].name;
+    const centerX = ctx.canvas.width / 2;
+    const shoulderY = ctx.canvas.height * 0.3;
+    const wristY = ctx.canvas.height * 0.2;
+
+    switch (currentPose) {
+      case 'RightArmUp':
+        this.drawArmGuide(ctx, centerX + 100, shoulderY, centerX + 100, wristY);
+        break;
+      case 'LeftArmUp':
+        this.drawArmGuide(ctx, centerX - 100, shoulderY, centerX - 100, wristY);
+        break;
+      case 'BothArmsUp':
+        this.drawArmGuide(ctx, centerX + 100, shoulderY, centerX + 100, wristY);
+        this.drawArmGuide(ctx, centerX - 100, shoulderY, centerX - 100, wristY);
+        break;
+    }
+  }
+
+  private drawArmGuide(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number): void {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
     
-    // Conexiones para la postura objetivo
-    POSE_CONNECTIONS.forEach(([i1, i2]) => {
-      const p1 = this.currentPose.targetPose?.[i1];
-      const p2 = this.currentPose.targetPose?.[i2];
-      if (p1 && p2) {
-        ctx.beginPath();
-        ctx.moveTo(p1.x * ctx.canvas.width, p1.y * ctx.canvas.height);
-        ctx.lineTo(p2.x * ctx.canvas.width, p2.y * ctx.canvas.height);
-        ctx.stroke();
-      }
-    });
+    ctx.beginPath();
+    ctx.arc(x2, y2, 15, 0, Math.PI * 2);
+    ctx.stroke();
   }
 
-  private drawUserLandmarks(ctx: CanvasRenderingContext2D, landmarks: any): void {
-    const drawLandmarks = (landmarks: any[], color: string, connections: [number, number][]) => {
-      if (!landmarks) return;
-      
-      // Dibujar puntos
-      landmarks.forEach((p: any) => {
-        ctx.beginPath();
-        ctx.arc(p.x * ctx.canvas.width, p.y * ctx.canvas.height, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
-        ctx.fill();
-      });
-      
-      // Dibujar conexiones
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      connections.forEach(([i1, i2]) => {
-        const p1 = landmarks[i1];
-        const p2 = landmarks[i2];
-        if (p1 && p2) {
-          ctx.beginPath();
-          ctx.moveTo(p1.x * ctx.canvas.width, p1.y * ctx.canvas.height);
-          ctx.lineTo(p2.x * ctx.canvas.width, p2.y * ctx.canvas.height);
-          ctx.stroke();
-        }
-      });
-    };
+  private drawUI(ctx: CanvasRenderingContext2D): void {
+  // Panel de instrucciones
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+  ctx.beginPath();
+  ctx.roundRect(20, 20, ctx.canvas.width - 40, 100, 15);
+  ctx.fill();
+  
+  // Icono de ejercicio
+  ctx.fillStyle = '#4CAF50';
+  ctx.font = '30px "Font Awesome 5 Free"';
+  ctx.fillText('\uf5e2', 35, 70); // Ícono de chequeo
+  
+  // Texto de instrucción
+  ctx.fillStyle = 'white';
+  ctx.font = '20px Arial';
+  ctx.fillText(this.instructionText, 70, 60);
+  
+  // Ayuda visual
+  ctx.font = '18px Arial';
+  ctx.fillStyle = '#FFD700';
+  ctx.fillText(this.visualAidText, 70, 90);
 
-    drawLandmarks(landmarks.pose, 'red', POSE_CONNECTIONS);
-    drawLandmarks(landmarks.face, 'blue', FACEMESH_CONNECTIONS);
-    drawLandmarks(landmarks.leftHand, 'green', []); // Sin conexiones para manos
-    drawLandmarks(landmarks.rightHand, 'yellow', []);
+  // Barra de progreso
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.beginPath();
+  ctx.roundRect(20, ctx.canvas.height - 60, 200, 20, 10);
+  ctx.fill();
+  
+  ctx.fillStyle = '#4CAF50';
+  ctx.beginPath();
+  ctx.roundRect(20, ctx.canvas.height - 60, 200 * (this.progress / 100), 20, 10);
+  ctx.fill();
+
+  // Mensaje final persistente
+  if (this.currentExercise.id === 4) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+    ctx.beginPath();
+    ctx.roundRect(ctx.canvas.width/2 - 200, ctx.canvas.height/2 - 100, 400, 200, 25);
+    ctx.fill();
+    
+    ctx.fillStyle = '#4CAF50';
+    ctx.font = '40px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('✅ Lección Completa', ctx.canvas.width/2, ctx.canvas.height/2 - 30);
+    
+    ctx.fillStyle = 'white';
+    ctx.font = '25px Arial';
+    ctx.fillText('¡Buen trabajo!', ctx.canvas.width/2, ctx.canvas.height/2 + 20);
+    ctx.font = '18px Arial';
+    ctx.fillText('Todos los ejercicios completados', ctx.canvas.width/2, ctx.canvas.height/2 + 60);
+    ctx.textAlign = 'left';
   }
 
+  }
   toggleDetection() {
     this.isDetecting = !this.isDetecting;
     if (this.isDetecting) {
@@ -344,5 +506,42 @@ export class HolisticComponent implements OnInit, AfterViewInit {
     if (ctx) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
+  }
+
+  private clearTimers(): void {
+    if (this.instructionRepeatTimer) clearInterval(this.instructionRepeatTimer);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    if (this.userVisibilityCheckInterval) clearInterval(this.userVisibilityCheckInterval);
+  }
+
+  private drawUserLandmarks(ctx: CanvasRenderingContext2D, landmarks: any): void {
+    const drawLandmarks = (landmarks: any[], color: string, connections: [number, number][]) => {
+      if (!landmarks) return;
+      
+      landmarks.forEach((p: any) => {
+        ctx.beginPath();
+        ctx.arc(p.x * ctx.canvas.width, p.y * ctx.canvas.height, 4, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+      });
+      
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      connections.forEach(([i1, i2]) => {
+        const p1 = landmarks[i1];
+        const p2 = landmarks[i2];
+        if (p1 && p2) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x * ctx.canvas.width, p1.y * ctx.canvas.height);
+          ctx.lineTo(p2.x * ctx.canvas.width, p2.y * ctx.canvas.height);
+          ctx.stroke();
+        }
+      });
+    };
+
+    drawLandmarks(landmarks.pose, 'red', POSE_CONNECTIONS);
+    drawLandmarks(landmarks.face, 'blue', FACEMESH_CONNECTIONS);
+    drawLandmarks(landmarks.leftHand, 'green', []);
+    drawLandmarks(landmarks.rightHand, 'yellow', []);
   }
 }
