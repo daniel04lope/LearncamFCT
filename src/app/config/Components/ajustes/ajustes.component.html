@@ -3,11 +3,11 @@
 
   <label>
     Tema:
-    <select [(ngModel)]="configuracion.tema">
-      <option value="claro">Claro</option>
-      <option value="oscuro">Oscuro</option>
-    </select>
-  </label>
+<select [(ngModel)]="configuracion.tema" (ngModelChange)="actualizarTema()">
+  <option value="oscuro">Oscuro</option>
+  <option value="claro">Claro</option>
+</select>
+</label>
 
 <label>
   Idioma:
@@ -31,10 +31,6 @@
 
 
 
-  <label>
-    <input type="checkbox" [(ngModel)]="configuracion.notificaciones" />
-    Notificaciones activadas
-  </label>
 
   <button (click)="guardarConfiguracion()">Guardar</button>
 </div>

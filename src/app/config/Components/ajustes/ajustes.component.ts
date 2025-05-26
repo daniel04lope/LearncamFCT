@@ -6,11 +6,12 @@ import { TraduccionService } from '../../../service/traduccion.service';
 
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { CabeceraComponent } from '../../../main-page/components/cabecera/cabecera.component';
 
 interface Configuracion {
   tema: 'claro' | 'oscuro';
   idioma: string;
-  notificaciones: boolean;
+  
 }
 
 @Component({
@@ -23,9 +24,9 @@ interface Configuracion {
 export class AjustesComponent implements OnInit {
 
   configuracion: Configuracion = {
-    tema: 'claro',
+    tema: 'oscuro',
     idioma: 'es',
-    notificaciones: true
+  
   };
 
   fotoBase64: string | null = null;
@@ -145,4 +146,18 @@ export class AjustesComponent implements OnInit {
       alert('Hubo un problema al guardar');
     }
   }
+
+
+  actualizarTema(): void {
+  const body = document.body;
+  if (this.configuracion.tema === 'oscuro') {
+    body.style.backgroundImage = "url('https://github.com/daniel04lope/LearncamFCT/blob/385635e55700243338acdae8d60145f1feede2be/src/assets/learncam_background.png')";
+  } else {
+    body.style.backgroundImage = "url('https://github.com/daniel04lope/LearncamFCT/blob/Test/src/assets/Modoclaro.png')";
+    body.style.backgroundColor = '#fff'; // Opcional
+    body.style.color = '#000'; // Opcional
+    
+  }
+}
+
 }
