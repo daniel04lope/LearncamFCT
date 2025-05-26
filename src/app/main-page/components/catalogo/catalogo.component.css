@@ -9,7 +9,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-
 }
 
 html, body {
@@ -21,8 +20,6 @@ html, body {
   
 }
 
-.main-container{  background-image: url(../../../../assets/learncam_background.png);
-}
 
 img {
   max-width: 100%;
@@ -155,4 +152,45 @@ footer {
   .card span {
     font-size: 0.85rem;
   }
+
+
+  :root {
+  --color-texto-claro: #000000; /* negro para tema claro */
+  --color-texto-oscuro: #f3f3f3; /* blanco para tema oscuro */
+
+  /* Otros colores */
+  --primary: #141414;
+  --light: var(--color-texto-oscuro);
+  --dark: #686868;
+  --accent: #e50914;
+}
+
+/* Tema claro */
+body.tema-claro {
+  --light: var(--color-texto-claro);
+  background-color: #fefefe;
+  color: var(--light);
+}
+
+/* Tema oscuro */
+body.tema-oscuro {
+  --light: var(--color-texto-oscuro);
+  background-color: var(--primary);
+  color: var(--light);
+}
+
+/* Usamos var(--light) para el texto principal */
+.categoria-title,
+.item-link,
+.item-name {
+  color: var(--light) !important;
+  text-decoration: none;
+}
+
+/* Línea separadora */
+.categoria-separator {
+  margin: 40px 0;
+  border-color: var(--dark);
+}
+
 }

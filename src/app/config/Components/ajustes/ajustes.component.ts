@@ -11,7 +11,6 @@ import { CabeceraComponent } from '../../../main-page/components/cabecera/cabece
 interface Configuracion {
   tema: 'claro' | 'oscuro';
   idioma: string;
-  
 }
 
 @Component({
@@ -26,7 +25,6 @@ export class AjustesComponent implements OnInit {
   configuracion: Configuracion = {
     tema: 'oscuro',
     idioma: 'es',
-  
   };
 
   fotoBase64: string | null = null;
@@ -44,9 +42,9 @@ export class AjustesComponent implements OnInit {
     if (configGuardada) {
       this.configuracion = JSON.parse(configGuardada);
       this.traducirPagina();
+      this.actualizarTema();
     }
 
-    // Cargar fotoBase64 guardada de Firestore
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
@@ -119,45 +117,46 @@ export class AjustesComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  async guardarConfiguracion() {
-    localStorage.setItem('configuracion', JSON.stringify(this.configuracion));
-    this.traducirPagina();
+async guardarConfiguracion() {
+  // Siempre guardar localmente
+  localStorage.setItem('configuracion', JSON.stringify(this.configuracion));
+  this.traducirPagina();
+  this.actualizarTema();
 
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) {
-      alert('Debes iniciar sesión');
-      return;
-    }
+  // Intentar guardar en Firestore si el usuario está autenticado
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-    const db = getFirestore();
-    const userRef = doc(db, 'users', user.uid);
-
-    const dataToSave = {
-      configuracion: this.configuracion,
-      fotoPerfil: this.fotoBase64 || null
-    };
-
-    try {
-      await setDoc(userRef, dataToSave, { merge: true });
-      alert('Configuración guardada correctamente');
-    } catch (err) {
-      console.error('Error guardando en Firestore:', err);
-      alert('Hubo un problema al guardar');
-    }
+  if (!user) {
+    console.warn('Configuración guardada solo localmente (sin sesión)');
+    return;
   }
 
+  const db = getFirestore();
+  const userRef = doc(db, 'users', user.uid);
 
-  actualizarTema(): void {
-  const body = document.body;
-  if (this.configuracion.tema === 'oscuro') {
-    body.style.backgroundImage = "url('https://github.com/daniel04lope/LearncamFCT/blob/385635e55700243338acdae8d60145f1feede2be/src/assets/learncam_background.png')";
-  } else {
-    body.style.backgroundImage = "url('https://github.com/daniel04lope/LearncamFCT/blob/Test/src/assets/Modoclaro.png')";
-    body.style.backgroundColor = '#fff'; // Opcional
-    body.style.color = '#000'; // Opcional
-    
+  const dataToSave = {
+    configuracion: this.configuracion,
+    fotoPerfil: this.fotoBase64 || null
+  };
+
+  try {
+    await setDoc(userRef, dataToSave, { merge: true });
+    alert('Configuración guardada correctamente en la nube');
+  } catch (err) {
+    console.error('Error guardando en Firestore:', err);
+    alert('Hubo un problema al guardar en la nube');
   }
 }
 
+  actualizarTema(): void {
+    const body = document.body;
+    if (this.configuracion.tema === 'oscuro') {
+      document.body.style.backgroundImage = "url('https://raw.githubusercontent.com/daniel04lope/LearncamFCT/385635e55700243338acdae8d60145f1feede2be/src/assets/learncam_background.png')";
+ 
+    } else {
+      document.body.style.backgroundImage = "url('https://raw.githubusercontent.com/daniel04lope/LearncamFCT/0a89fe5803290214c5f3dc1e4b0d04eac2ff907c/src/assets/Modoclaro.png')";
+ 
+    }
+  }
 }

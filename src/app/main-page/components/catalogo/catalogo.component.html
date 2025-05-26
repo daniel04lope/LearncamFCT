@@ -1,15 +1,14 @@
 <div class="main-container">
   <div *ngFor="let categoria of resultadosPorCategoria | keyvalue">
-    <h2 style="margin-bottom: 10px; color:white;">{{ categoria.key }}</h2>
+    <h2 class="categoria-title">{{ categoria.key }}</h2>
     <div class="box">
       <ng-container *ngFor="let item of categoria.value">
-      <a [routerLink]="item.url" (click)="registrarHistorial(item.nombre, item.url)">
-      <img [src]="item.imagen" alt="{{ item.nombre }}" />
-      <p class="text-white" style="font-weight: bold;">{{ item.nombre }}</p>
-      </a>
-
+        <a [routerLink]="item.url" (click)="registrarHistorial(item.nombre, item.url)" class="item-link">
+          <img [src]="item.imagen" alt="{{ item.nombre }}" />
+          <p class="item-name">{{ item.nombre }}</p>
+        </a>
       </ng-container>
     </div>
-    <hr style="margin: 40px 0; border-color: var(--dark);" />
+    <hr class="categoria-separator" />
   </div>
 </div>
