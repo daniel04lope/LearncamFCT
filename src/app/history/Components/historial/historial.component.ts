@@ -36,7 +36,6 @@ export class HistorialComponent implements OnInit {
 
           this.historial = userData.historial || [];
 
-          // Ordenar por fecha descendente
           this.historial.sort((a, b) => {
             return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
           });

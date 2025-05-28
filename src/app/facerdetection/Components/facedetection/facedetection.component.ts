@@ -38,7 +38,7 @@ export class FacedetectionprincipalComponent implements OnInit, OnDestroy {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const imageDataUrl = canvas.toDataURL('image/png');
-      this.faceCaptured.emit(imageDataUrl);  // ← emitimos el string base64
+      this.faceCaptured.emit(imageDataUrl);  
     }
   }
 

@@ -12,7 +12,6 @@ export class AuthStateService {
   private router = inject(Router);
 
   constructor() {
-    // Escucha los cambios en el estado de autenticación
     onAuthStateChanged(this.auth, (user) => {
       this.userSubject.next(user);
     });
@@ -21,8 +20,8 @@ export class AuthStateService {
   async recargarUsuario() {
     const user = this.currentUser;
     if (user) {
-      await user.reload();  // recarga datos desde Firebase
-      this.userSubject.next(this.auth.currentUser); // emite usuario actualizado
+      await user.reload();  
+      this.userSubject.next(this.auth.currentUser); 
     }
   }
 

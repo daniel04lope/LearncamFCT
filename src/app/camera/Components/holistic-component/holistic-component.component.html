@@ -1,35 +1,38 @@
-<!-- src/app/holistic-component/holistic-component.component.html -->
 <div class="main-container">
-  <!-- Efecto retro mientras carga o está pausado -->
-  <div *ngIf="isCameraLoading || !isDetecting" class="intro-wrap">
-    <div class="scanlines"></div>
-    <div class="noise"></div>
-    <div class="noise noise-moving"></div>
-    <div class="play" data-splitting>INICIANDO</div>
-  </div>
 
-  <!-- Video oculto, solo canvas visible -->
+<div *ngIf="isCameraLoading || !isDetecting" class="intro-wrap">
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+  <div class="noise noise-moving"></div>
+  <div class="play" data-splitting>INICIANDO</div>
+
+  <!-- Botón de Reanudar solo si ya cargó la cámara y está pausado -->
+  <button *ngIf="!isCameraLoading && !isDetecting"
+          class="control-button"
+          (click)="toggleDetection()">
+    Reanudar
+  </button>
+</div>
+
   <video #video style="display:none;" autoplay></video>
   
-  <!-- Contenedor principal de la cámara -->
   <div class="camera-frame">
     <canvas #outputCanvas class="outputCanvas"></canvas>
   </div>
 
-  <!-- Panel de instrucciones -->
   <div class="instruction-panel" *ngIf="currentExercise.id !== 4 && !isCameraLoading">
     <div class="exercise-number">Ejercicio {{currentExercise.id}}/3</div>
     <div class="instruction-text">{{ instructionText }}</div>
     <div class="visual-aid">{{ visualAidText }}</div>
   </div>
 
-  <!-- Barra de progreso -->
+  
   <div class="progress-bar-container" *ngIf="currentExercise.id !== 4">
     <div class="progress-bar" [style.width.%]="progress"></div>
     <div class="progress-text">{{ progress.toFixed(0) }}% Completado</div>
   </div>
 
-  <!-- Overlay de finalización -->
+  
   <div class="completion-overlay" *ngIf="currentExercise.id === 4">
     <div class="animation-container">
       <div class="confetti"></div>
@@ -42,7 +45,7 @@
     <p class="final-message">Buen trabajo 👏</p>
   </div>
 
-  <!-- Controles -->
+  
   <div class="controls">
     <button class="control-button" 
             [class.paused]="!isDetecting" 
@@ -51,9 +54,10 @@
     </button>
   </div>
 
-  <!-- Indicador de estado -->
+  
   <div class="status-indicator">
     <div class="status-dot" [style.background]="isDetecting ? '#2ecc71' : '#e74c3c'"></div>
     <span>{{ isDetecting ? 'Activo' : 'Pausado' }}</span>
   </div>
-</div>
+ 
+

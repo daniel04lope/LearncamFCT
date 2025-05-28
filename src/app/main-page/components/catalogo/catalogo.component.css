@@ -27,7 +27,6 @@ img {
   object-fit: cover;
 }
 
-/* HEADER */
 header {
   padding: 20px;
   position: fixed;
@@ -56,15 +55,13 @@ header {
   color: var(--accent);
 }
 
-/* MAIN CONTAINER */
 .main-container {
-  padding: 50px 30px 30px 30px; /* ⬅️ espacio superior reducido */
+  padding: 50px 30px 30px 30px; 
 }
 
-/* BOX DE CARDS */
 .box {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ← máximo 3 columnas */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 20px;
   justify-items: center;
 }

@@ -1,6 +1,4 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap');
-
 
 :host {
   display: block;
@@ -20,6 +18,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .intro-wrap .scanlines {
   position: absolute;
   inset: 0;
@@ -31,6 +30,7 @@
   );
   animation: scanlines 1s linear infinite;
 }
+
 .intro-wrap .noise {
   position: absolute;
   inset: 0;
@@ -38,6 +38,7 @@
   opacity: 0.15;
   animation: noise 1s steps(10) infinite;
 }
+
 .intro-wrap .play {
   font-family: 'Press Start 2P', cursive;
   font-size: 2.5rem;
@@ -48,6 +49,35 @@
   animation: text-glow 1.5s ease-in-out infinite alternate;
 }
 
+.intro-wrap .intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  z-index: 10;
+}
+
+.resume-button {
+  padding: 14px 40px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  background: #FFD700;
+  color: #000;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.resume-button:hover {
+  background: #ffc107;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+
 .camera-frame {
   position: relative;
   max-width: 1280px;
@@ -56,6 +86,7 @@
   overflow: hidden;
   box-shadow: 0 0 30px rgba(76,175,80, 0.2);
 }
+
 .camera-frame::before {
   content: '';
   position: absolute;
@@ -85,18 +116,21 @@
   z-index: 500;
   box-shadow: 0 4px 15px rgba(76,175,80, 0.2);
 }
+
 .instruction-panel .exercise-number {
   color: #4CAF50;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   font-family: 'Press Start 2P', cursive;
 }
+
 .instruction-panel .instruction-text {
   color: #ffffff;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }
+
 .instruction-panel .visual-aid {
   color: #FFD700;
   font-size: 1.2rem;
@@ -115,11 +149,13 @@
   overflow: hidden;
   z-index: 500;
 }
+
 .progress-bar-container .progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #4CAF50 0%, #388E3C 100%);
   transition: width 0.3s ease;
 }
+
 .progress-bar-container .progress-text {
   position: absolute;
   width: 100%;
@@ -144,17 +180,20 @@
   backdrop-filter: blur(5px);
   box-shadow: 0 0 40px rgba(76,175,80, 0.3);
 }
+
 .completion-overlay h2 {
   color: #4CAF50;
   font-size: 2rem;
   margin-bottom: 1.5rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
+
 .completion-overlay .congrats {
   font-size: 1.8rem;
   color: #FFD700;
   margin: 1rem 0;
 }
+
 .completion-overlay .final-message {
   font-size: 1.2rem;
   color: #ffffff;
@@ -168,6 +207,7 @@
   transform: translateX(-50%);
   z-index: 500;
 }
+
 .controls .control-button {
   padding: 12px 35px;
   font-size: 1rem;
@@ -181,10 +221,12 @@
   font-family: 'Press Start 2P', cursive;
   letter-spacing: 1px;
 }
+
 .controls .control-button:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 6px 20px rgba(76,175,80, 0.4);
 }
+
 .controls .control-button.paused {
   background: #e74c3c;
   box-shadow: 0 4px 15px rgba(231,76,60, 0.3);
@@ -201,6 +243,7 @@
   font-size: 0.9rem;
   z-index: 500;
 }
+
 .status-indicator .status-dot {
   width: 12px;
   height: 12px;
@@ -208,6 +251,7 @@
   animation: pulse 1.5s infinite;
 }
 
+/* Animations */
 @keyframes scanlines {
   from { background-position: 0 0; }
   to { background-position: 0 100%; }
@@ -229,25 +273,163 @@
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
+/* Responsive */
+@media (max-width: 1024px) {
+  .instruction-panel {
+    max-width: 95%;
+    font-size: 1rem;
+  }
+
+  .completion-overlay {
+    padding: 2rem;
+  }
+
+  .controls .control-button {
+    padding: 10px 30px;
+    font-size: 0.95rem;
+  }
+
+  .resume-button {
+    padding: 12px 30px;
+    font-size: 0.85rem;
+  }
+}
+
 @media (max-width: 768px) {
   .instruction-panel {
-    padding: 1rem;
-    width: 90%;
+    padding: 0.8rem;
+    font-size: 0.95rem;
   }
+
   .instruction-panel .instruction-text {
     font-size: 1rem;
   }
-  .completion-overlay {
-    padding: 1.5rem;
-  }
+
   .completion-overlay h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
+
   .completion-overlay .congrats {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
+
+  .completion-overlay .final-message {
+    font-size: 1rem;
+  }
+
   .controls .control-button {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+
+  .status-indicator {
+    font-size: 0.75rem;
+  }
+
+  .progress-bar-container {
+    width: 90%;
+    bottom: 70px;
+  }
+
+  .resume-button {
     padding: 10px 25px;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
   }
 }
+
+@media (max-width: 480px) {
+  .intro-wrap .play {
+    font-size: 1.5rem;
+  }
+
+  .instruction-panel .instruction-text {
+    font-size: 0.9rem;
+  }
+
+  .instruction-panel .visual-aid {
+    font-size: 1rem;
+  }
+
+  .controls .control-button {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+  }
+
+  .camera-frame {
+    margin: 10px;
+  }
+
+  .outputCanvas {
+    height: auto;
+  }
+
+  .resume-button {
+    padding: 10px 25px;
+    font-size: 0.75rem;
+  }
+
+
+
+  .camera-frame {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 20px auto;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(76,175,80, 0.2);
+  aspect-ratio: 16 / 9;
+}
+.camera-frame::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 2px solid rgba(76,175,80, 0.3);
+  border-radius: 20px;
+  z-index: -1;
+}
+
+.outputCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .camera-frame {
+    margin: 15px auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 768px) {
+  .camera-frame {
+    margin: 10px auto;
+    padding: 0 10px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .outputCanvas {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .camera-frame {
+    margin: 10px 5px;
+    border-radius: 10px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .outputCanvas {
+    width: 100%;
+    height: auto;
+  }
+}
+
+}
+
+

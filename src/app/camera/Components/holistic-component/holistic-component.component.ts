@@ -109,7 +109,7 @@ export class HolisticComponent implements OnInit, AfterViewInit, OnDestroy {
   private synth = window.speechSynthesis;
   private utterance = new SpeechSynthesisUtterance();
  private lastTtsTime: number = 0;
-  private readonly ttsCooldown: number = 3000; // 3 segundos de cooldown 
+  private readonly ttsCooldown: number = 3000; 
   currentExercise!: Exercise;
   instructionText: string = '';
   visualAidText: string = '';

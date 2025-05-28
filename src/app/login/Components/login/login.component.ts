@@ -59,7 +59,6 @@ export class LoginComponent implements OnDestroy {
     this.cancelFaceLogin();
   }
 
-  // --- LOGIN TRADICIONAL ---
  async onSubmit() {
     this.firebaseErrorMessage = '';
     if (!this.loginForm.valid) {
@@ -70,7 +69,7 @@ export class LoginComponent implements OnDestroy {
     const { email, password } = this.loginForm.value;
     try {
       const cred = await signInWithEmailAndPassword(this.auth, email, password);
-      this.authState.setUser(cred.user); // ✅ guarda el usuario
+      this.authState.setUser(cred.user); 
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.firebaseErrorMessage = this.mapError(err);
@@ -84,7 +83,7 @@ export class LoginComponent implements OnDestroy {
     this.loading = true;
        try {
       const cred = await signInWithPopup(this.auth, new GoogleAuthProvider());
-      this.authState.setUser(cred.user); // cred.user.photoURL contiene la imagen
+      this.authState.setUser(cred.user); 
 
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
@@ -96,7 +95,7 @@ export class LoginComponent implements OnDestroy {
 
 
 sendResetEmail(event: Event): void {
-  event.preventDefault(); // ⛔️ Evita que el enlace recargue la página
+  event.preventDefault(); 
 
   const email = this.loginForm.get('email')?.value;
 
@@ -147,7 +146,7 @@ sendResetEmail(event: Event): void {
     }
   }
 
-  // --- LOGIN FACIAL ---
+  
   async signInWithFacial() {
     this.firebaseErrorMessage = '';
     this.loading = true;
@@ -189,11 +188,11 @@ private async loadUsersDescriptors() {
     const d = doc.data() as any;
     if (Array.isArray(d.faceDescriptor) && d.faceDescriptor.length === 128 && d.password) {
       const desc = new Float32Array(d.faceDescriptor as number[]);
-      const decryptedPassword = decrypt(d.password); // <--- Aquí desciframos
+      const decryptedPassword = decrypt(d.password); 
       labeled.push(new faceapi.LabeledFaceDescriptors(d.email, [desc]));
       this.usersData.push({ 
         email: d.email, 
-        password: decryptedPassword, // <--- Guardamos descifrado
+        password: decryptedPassword, 
         descriptor: desc 
       });
     }
@@ -224,7 +223,7 @@ private async loadUsersDescriptors() {
         const best = this.faceMatcher.findBestMatch(det.descriptor);
         if (best.label !== 'unknown') {
           const user = this.usersData.find(u => u.email === best.label)!;
-          await this.finishFaceLogin(user.email);  // <-- Solo email, no password
+          await this.finishFaceLogin(user.email);  
           console.log('Usuario encontrado:', user.email);
         }
       }
@@ -237,11 +236,11 @@ private async loadUsersDescriptors() {
 
     try {
       const actionCodeSettings = {
-        url: window.location.origin + '/finishSignIn', // URL donde el usuario completará login
+        url: window.location.origin + '/finishSignIn', 
         handleCodeInApp: true,
       };
 
-      // Guardar el email para usar después al confirmar el enlace
+      
       window.localStorage.setItem('emailForSignIn', email);
 
       await sendSignInLinkToEmail(this.auth, email, actionCodeSettings);

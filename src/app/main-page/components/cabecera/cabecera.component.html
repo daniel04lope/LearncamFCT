@@ -2,13 +2,13 @@
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-between">
 
-      <!-- Logo -->
+      
       <a href="/" class="d-flex align-items-center text-white text-decoration-none">
         <img src="../../../../assets/Leanrcam.svg" width="90" height="90" alt="Home" class="me-2" />
         <span class="fs-4 fw-bold">Leanrcam</span>
       </a>
 
-      <!-- 🔍 Barra de búsqueda -->
+       
       <div class="flex-grow-1 mx-4" *ngIf="mostrarBarraBusqueda">
         <input
           type="text"
@@ -19,7 +19,7 @@
         />
       </div>
 
-      <!-- 🔘 Menú de navegación -->
+      
       <ul class="nav text-end align-items-center">
         <li class="nav-item mx-2">
           <a href="#" class="nav-link text-white d-flex flex-column align-items-center">
@@ -40,7 +40,7 @@
           </a>
         </li>
 
-        <!-- Perfil de usuario con dropdown -->
+        
         <li class="nav-item mx-2 dropdown" *ngIf="userName">
           <a class="nav-link dropdown-toggle p-0 d-flex align-items-center justify-content-center"
              href="#" role="button" id="dropdownUserMenu"
@@ -65,7 +65,7 @@
           </ul>
         </li>
 
-        <!-- Si no hay usuario, muestra solo el ícono de perfil (redirige a login) -->
+        
         <li class="nav-item mx-2" *ngIf="!userName">
           <a href="/login" class="nav-link p-0 d-flex align-items-center justify-content-center">
             <img src="../../../../assets/perfil.png"

@@ -10,12 +10,10 @@
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
               class="p-4 rounded-4 shadow-lg bg-white" novalidate>
 
-          <!-- Alertas de Firebase -->
           <div *ngIf="firebaseErrorMessage" class="alert alert-danger mb-4">
             {{ firebaseErrorMessage }}
           </div>
 
-          <!-- Email -->
           <div class="mb-4">
             <label for="email" class="form-label fw-semibold">Correo electrónico</label>
             <input type="email" id="email" class="form-control form-control-lg"
@@ -31,7 +29,6 @@
             </div>
           </div>
 
-          <!-- Contraseña -->
           <div class="mb-4">
             <label for="password" class="form-label fw-semibold">Contraseña</label>
             <input type="password" id="password" class="form-control form-control-lg"
@@ -47,7 +44,6 @@
             </div>
           </div>
 
-          <!-- Enlaces -->
           <div class="d-flex justify-content-between align-items-center mb-4">
 <a href="#" (click)="sendResetEmail($event)"  class="text-primary">
   ¿Has olvidado tu contraseña?
@@ -57,20 +53,17 @@
             <a href="registro" class="text-primary">No tienes cuenta? REGISTRATE</a>
           </div>
 
-          <!-- Botón de login tradicional -->
           <button type="submit" class="btn btn-primary btn-lg w-100 mb-3"
                   [disabled]="loading">
             {{ loading ? 'Cargando...' : 'Inicia sesión' }}
           </button>
 
-          <!-- Separador -->
           <div class="divider d-flex align-items-center my-4">
             <hr class="flex-grow-1 me-2" />
             <span class="text-muted">O</span>
             <hr class="flex-grow-1 ms-2" />
           </div>
 
-          <!-- Botones de login social -->
           <button type="button" class="btn btn-lg w-100 mb-2"
                   style="background-color: #DB4437; color: #fff;"
                   (click)="loginWithGoogle()"
@@ -85,14 +78,12 @@
             <i class="fab fa-twitter me-2"></i> Continuar con Twitter
           </button>
 
-          <!-- Separador Reconocimiento Facial -->
           <div class="divider d-flex align-items-center my-4">
             <hr class="flex-grow-1 me-2" />
             <span class="text-muted">O continúa con</span>
             <hr class="flex-grow-1 ms-2" />
           </div>
 
-          <!-- Botón Reconocimiento Facial -->
           <button type="button" class="btn btn-lg w-100 mb-2 btn-outline-primary"
                   (click)="signInWithFacial()"
                   [disabled]="loading">
@@ -100,7 +91,6 @@
           </button>
         </form>
 
-        <!-- Vista previa de la cámara -->
         <div class="text-center mt-4" *ngIf="showVideoPreview">
           <video #videoPreview class="rounded-3 shadow" width="300" autoplay muted></video>
           <div class="mt-3">

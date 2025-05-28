@@ -118,12 +118,10 @@ export class AjustesComponent implements OnInit {
   }
 
 async guardarConfiguracion() {
-  // Siempre guardar localmente
   localStorage.setItem('configuracion', JSON.stringify(this.configuracion));
   this.traducirPagina();
   this.actualizarTema();
 
-  // Intentar guardar en Firestore si el usuario está autenticado
   const auth = getAuth();
   const user = auth.currentUser;
 

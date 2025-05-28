@@ -1,25 +1,82 @@
 .scanner-container {
-    max-width: 500px;
-    margin: auto;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+.video-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+video {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem; /* equivalente a rounded-3 */
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: block;
+}
+
+.face-guide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border: 4px dashed rgba(0, 255, 0, 0.5);
+  border-radius: 50%;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 2;
+  clip-path: circle(45% at 50% 50%);
+}
+
+/* Botón */
+.d-grid {
+  margin-top: 15px;
+}
+
+button.btn-primary {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #004085;
+}
+
+/* Media Queries para móviles */
+
+@media (max-width: 576px) {
+  .scanner-container {
+    max-width: 100%;
+    padding: 0 10px;
   }
-  
+
   .video-wrapper {
-    position: relative;
-    display: inline-block;
+    max-width: 100%;
   }
-  
+
   .face-guide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 480px;
-    height: 360px;
-    border: 4px dashed rgba(0, 255, 0, 0.5);
-    border-radius: 50%;
-    box-sizing: border-box;
-    pointer-events: none;
-    margin: auto;
-    z-index: 2;
-    clip-path: circle(45% at 50% 50%);
+    width: 85%;
+    max-width: none;
+    border-width: 3px;
   }
-  
+
+  button.btn-primary {
+    font-size: 1rem;
+    padding: 10px 0;
+  }
+}
