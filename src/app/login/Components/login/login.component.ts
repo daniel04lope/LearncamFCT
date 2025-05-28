@@ -205,11 +205,23 @@ private async loadUsersDescriptors() {
   }
 }
 
-  private async startCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 } });
+private async startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: 'user',   // Cámara frontal
+        width: 640,
+        height: 480
+      }
+    });
+
     this.videoEl.nativeElement.srcObject = stream;
     await this.videoEl.nativeElement.play();
+  } catch (error) {
+    console.error('No se pudo iniciar la cámara frontal:', error);
   }
+}
+
 
 
   private startDetectionLoop() {

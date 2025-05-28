@@ -215,38 +215,41 @@ export class HolisticComponent implements OnInit, AfterViewInit, OnDestroy {
     this.holistic.onResults((results: Results) => this.processFrame(results));
     this.startCamera();
   }
+async startCamera() {
+  try {
+    this.mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' }  // Cámara frontal
+    });
 
-  async startCamera() {
-    try {
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      this.video.nativeElement.srcObject = this.mediaStream;
-      
-      await new Promise((resolve) => {
-        this.video.nativeElement.onloadeddata = resolve;
-      });
-      
-      await this.video.nativeElement.play();
-      this.isCameraLoading = false;
+    this.video.nativeElement.srcObject = this.mediaStream;
 
-      this.userVisibilityCheckInterval = setInterval(() => {
-        if (this.isUserVisible && !this.initialInstructionsGiven) {
-          this.startCountdown();
-          this.initialInstructionsGiven = true;
-        }
-      }, 1000);
+    await new Promise((resolve) => {
+      this.video.nativeElement.onloadeddata = resolve;
+    });
 
-      const loop = async () => {
-        if (this.video.nativeElement.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
-          await this.holistic.send({ image: this.video.nativeElement });
-        }
-        this.animationFrameId = requestAnimationFrame(loop);
-      };
-      loop();
-    } catch (err) {
-      console.error('Error al iniciar la cámara:', err);
-      this.isCameraLoading = false;
-    }
+    await this.video.nativeElement.play();
+    this.isCameraLoading = false;
+
+    this.userVisibilityCheckInterval = setInterval(() => {
+      if (this.isUserVisible && !this.initialInstructionsGiven) {
+        this.startCountdown();
+        this.initialInstructionsGiven = true;
+      }
+    }, 1000);
+
+    const loop = async () => {
+      if (this.video.nativeElement.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        await this.holistic.send({ image: this.video.nativeElement });
+      }
+      this.animationFrameId = requestAnimationFrame(loop);
+    };
+    loop();
+  } catch (err) {
+    console.error('Error al iniciar la cámara:', err);
+    this.isCameraLoading = false;
   }
+}
+
 
   private checkUserVisibility(landmarks: any): boolean {
     return !!landmarks.pose?.length && landmarks.pose.some((l: any) => l.visibility > 0.5);
