@@ -1,17 +1,13 @@
 <div class="main-container">
 
-<div *ngIf="isCameraLoading || !isDetecting" class="intro-wrap">
+<div *ngIf="isCameraLoading" class="intro-wrap">
+
   <div class="scanlines"></div>
   <div class="noise"></div>
   <div class="noise noise-moving"></div>
   <div class="play" data-splitting>INICIANDO</div>
 
-  <!-- Botón de Reanudar solo si ya cargó la cámara y está pausado -->
-  <button *ngIf="!isCameraLoading && !isDetecting"
-          class="control-button"
-          (click)="toggleDetection()">
-    Reanudar
-  </button>
+
 </div>
 
   <video #video style="display:none;" autoplay></video>

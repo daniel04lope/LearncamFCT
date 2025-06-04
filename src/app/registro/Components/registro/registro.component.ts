@@ -148,7 +148,7 @@ async onSubmit(): Promise<void> {
   this.firebaseErrorMessage = '';
 
   const { name, email, password } = this.registerForm.value;
-  const encryptedPassword = encrypt(password); // <--- Aquí ciframos
+  const encryptedPassword = encrypt(password);
 
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -164,7 +164,7 @@ async onSubmit(): Promise<void> {
       uid: userCredential.user.uid,
       displayName: name,
       email: email,
-      password: encryptedPassword, // <--- Guardamos cifrado
+      password: encryptedPassword, 
       faceDescriptor: this.faceDescriptor,
       registrationDate: new Date(),
       lastLogin: new Date(),

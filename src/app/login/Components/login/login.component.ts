@@ -209,7 +209,7 @@ private async startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: 'user',   // Cámara frontal
+        facingMode: 'user',   
         width: 640,
         height: 480
       }
