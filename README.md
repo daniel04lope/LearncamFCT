@@ -1,27 +1,30 @@
-# LearncamFCT
+![Logo de GitHub](https://github.com/daniel04lope/LearncamFCT/blob/Test/src/assets/Leanrcam.svg) <h1>LEANRCAM</h1>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.3.
 
-## Development server
+Leanrcam es un proyecto final de grado superior el cual usa reconocimiento facial y corporal para hacer que usuario aprenda
+nuevos 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Este proyecto usa firebase como base de datos 
 
-## Code scaffolding
+LearncamFCT
+Este proyecto se ha generado con Angular CLI versión 17.3.3.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Servidor de desarrollo
+Ejecute ng serve para un servidor de desarrollo. Navegue a http://localhost:4200/. La aplicación se recargará automáticamente si cambia alguno de los archivos fuente.
 
-## Build
+Estructura del código
+Ejecute ng generate component component-name para generar un nuevo componente. También puede utilizar ng generate directive|pipe|service|class|guard|interface|enum|module.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Compilación
+Ejecute ng build para compilar el proyecto. Los artefactos de compilación se almacenarán en el directorio dist/.
 
-## Running unit tests
+Ejecución de pruebas unitarias
+Ejecute ng test para ejecutar las pruebas unitarias a través de Karma.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Ejecución de pruebas de extremo a extremo
+Ejecute ng e2e para ejecutar las pruebas de extremo a extremo a través de la plataforma que elija. Para utilizar este comando, primero debe añadir un paquete que implemente capacidades de pruebas de extremo a extremo.
 
-## Running end-to-end tests
+Más ayuda
+Para obtener más ayuda sobre Angular CLI, utilice ng help o consulte la página Descripción general y referencia de comandos de Angular CLI.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Traducción realizada con la versión gratuita del traductor DeepL.com
