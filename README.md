@@ -27,4 +27,4 @@ Ejecute ng e2e para ejecutar las pruebas de extremo a extremo a través de la pl
 Más ayuda
 Para obtener más ayuda sobre Angular CLI, utilice ng help o consulte la página Descripción general y referencia de comandos de Angular CLI.
 
-Traducción realizada con la versión gratuita del traductor DeepL.com
+
